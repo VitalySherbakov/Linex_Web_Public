@@ -5,7 +5,6 @@ numberversionlinex=$(uname -a)
 dirhome="${PWD}"
 dirsource="Linex_Web_Public"
 scriptrun=$(basename -- "$0")
-echo "Скрипт: $scriptrun"
 
 function function_python(){
     apt update -y
@@ -55,7 +54,7 @@ function function_pack2(){
     echo "-----Конец Установки Пакетов-----"
 	echo "Авто Выход с Скрипта"
 	echo "Повторно Войдите в Скрипт Командой"
-	echo "bash ./$dirsource/Linex_Public.sh"
+	echo "bash ./$dirsource/$scriptrun"
 	exit
 }
 
@@ -104,7 +103,7 @@ function main(){
 		function_install_cpu
 	fi
     if [ "$command" == "run" ]; then
-        python3.8 "./$dirsource/$scriptrun.py" "$1"
+        python3.8 "./$dirsource/LinexWeb.py" "$1"
 	fi
     if [ "$command" == "exit" ]; then
 		#break
