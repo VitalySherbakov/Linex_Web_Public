@@ -20,7 +20,9 @@ def Main():
             print(f"IP Роутера: {ip_router}")
         else:
             print(err_router)
-        app.GetIP_Mashune() 
+        print(f"-------------------------Адреса--------------------------")
+        app.GetIP_Mashune()
+        print(f"---------------------------------------------------")
         print(f"1) Список Проектов")
         print(f"2) Список Сервисов")
         print(f"3) Скачать Проект")

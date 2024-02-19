@@ -22,7 +22,7 @@ class Web_Core(object):
         if IPAddr.returncode == 0:
             stdout_lines = IPAddr.stdout.splitlines()
             for line in stdout_lines:
-                print(f"Address: {line}")
+                print(f"Адресс: {line}")
         else:
             print("Ошибка выполнения команды")
     def GetIP(self)->list:
