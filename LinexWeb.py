@@ -25,10 +25,11 @@ def Main():
         print(f"---------------------------------------------------")
         print(f"1) Список Проектов")
         print(f"2) Список Сервисов")
-        print(f"3) Скачать Проект")
-        print(f"4) Запуск Проекта Опубликовать")
-        print(f"5) Очистить Консоль")
-        print(f"6) Выход из Скрипта")
+        print(f"3) Установить IP Адресс")
+        print(f"4) Скачать Проект")
+        print(f"5) Запуск Проекта Опубликовать")
+        print(f"6) Очистить Консоль")
+        print(f"7) Выход из Скрипта")
         result = app.InputWhile("Номер Выбора: ")
         if result=="1":
             pass
@@ -39,10 +40,12 @@ def Main():
         if result=="4":
             pass 
         if result=="5":
-            os.system("clear")
+            pass 
         if result=="6":
+            os.system("clear")
+        if result=="7":
             break
-        elif result!="1" and result!="2" and result!="3" and result!="4" and result!="5" and result!="6":
+        elif result!="1" and result!="2" and result!="3" and result!="4" and result!="5" and result!="6" and result!="7":
             print(f"Не Верная {result} Команда!")
         app.Pause()
 
