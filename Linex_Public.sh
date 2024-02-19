@@ -34,6 +34,36 @@ function function_python(){
     rm -r Python-3.8.0
 }
 
+function function_core6(){
+    # Core 6
+    wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+    sudo dpkg -i packages-microsoft-prod.deb
+    sudo apt-get update -y
+    sudo apt-get install -y apt-transport-https
+    sudo apt-get update -y
+    sudo apt-get install -y dotnet-sdk-6.0
+    sudo apt-get install -y aspnetcore-runtime-6.0
+    rm -r packages-microsoft-prod.deb
+}
+
+function function_nginx(){
+    # nginx
+    sudo apt install nginx -y
+    sudo ufw app list
+    sudo ufw allow 'Nginx HTTP'
+    sudo ufw allow 22
+    sudo ufw allow 80
+    sudo ufw allow 443
+    sudo ufw enable
+    sudo ufw status
+}
+
+function function_projects(){
+    # projects
+    mkdir projects
+    sudo chmod -R 777 projects
+}
+
 function function_pack2(){
     # Установка Пакетов
     echo "Обновление..."
@@ -51,6 +81,9 @@ function function_pack2(){
     apt update -y
     echo "Загрузка Пакетов 2..."
     function_python
+    function_core6
+    function_nginx
+    function_projects
     echo "-----Конец Установки Пакетов-----"
 	echo "Авто Выход с Скрипта"
 	echo "Повторно Войдите в Скрипт Командой"
@@ -72,7 +105,6 @@ function auto_remove_program(){
 function main(){
     # Основное Меню
     echo "Команда: pack (Установка необходимых пакетов)"
-    echo "Команда: cpu (Установка утелиты для всех Linex, кроме Kali)"
     echo "Команда: run (Запуск Скрипта)"
     echo "Команда: remove (Авто Удаление Программы)"
     echo "Команда: exit (Выход)"
@@ -97,10 +129,6 @@ function main(){
     if [ "$command" == "pack" ]; then
         access_linex
 		function_pack2
-	fi
-    if [ "$command" == "cpu" ]; then
-        access_linex
-		function_install_cpu
 	fi
     if [ "$command" == "run" ]; then
         python3.8 "./$dirsource/LinexWeb.py" "$1"
