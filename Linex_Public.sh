@@ -2,34 +2,41 @@ versionscript=1.014
 echo "Установка и Работа Linex Web Public SV (Щ.В) (v $versionscript)"
 distributivelinex=$(uname -a)
 numberversionlinex=$(uname -a)
+# Sh Script Programm
 dirhome="${PWD}"
 dirsource="Linex_Web_Public"
 scriptrun=$(basename -- "$0")
+scriptrunpy="LinexWeb.py"
+# Py Version
+pythonrun="python3.8"
+pythondir="Python-3.8.0"
+pythondownload="https://www.python.org/ftp/python/3.8.0/Python-3.8.0.tgz"
+pythondownloadpip="https://bootstrap.pypa.io/get-pip.py"
 
 function function_python(){
     apt update -y
     sudo apt-get install build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libnl-3-dev libnl-genl-3-dev pkg-config libsqlite3-dev libpcre3-dev libffi-dev curl libreadline-dev ethtool libbz2-dev libtool autoconf -y
 	apt update -y
-    wget https://www.python.org/ftp/python/3.8.0/Python-3.8.0.tgz
-	tar -xf Python-3.8.0.tgz
-	rm -r Python-3.8.0.tgz
-	chmod -R 777 "Python-3.8.0/"
-	cd Python-3.8.0
+    wget $pythondownload
+	tar -xf $pythondir.tgz
+	rm -r $pythondir.tgz
+	chmod -R 777 "$pythondir/"
+	cd $pythondir
 	./configure --enable-optimizations
 	make -j $(nproc)
 	sudo make altinstall
 	apt update -y
-    wget -O get-pip.py https://bootstrap.pypa.io/get-pip.py
-    sudo python3.8 get-pip.py
-	pip install --upgrade pip
-	python3.8 --version
-	python3.8 -m pip install requests
-	python3.8 -m pip install alive-progress
-	python3.8 -m pip install tqdm
-	python3.8 -m pip install py7zr
-    python3.8 -m pip install pylzma
-	python3.8 -m pip install rarfile
-    python3.8 -m pip install urllib3==1.26.7
+    wget -O get-pip.py $pythondownloadpip
+    sudo $pythonrun get-pip.py
+	$pythonrun -m pip install --upgrade pip
+	$pythonrun --version
+	$pythonrun -m pip install requests
+	$pythonrun -m pip install alive-progress
+	$pythonrun -m pip install tqdm
+	$pythonrun -m pip install py7zr
+    $pythonrun -m pip install pylzma
+	$pythonrun -m pip install rarfile
+    $pythonrun -m pip install urllib3==1.26.7
     cd ..
     rm -r Python-3.8.0
 }
@@ -131,7 +138,7 @@ function main(){
 		function_pack2
 	fi
     if [ "$command" == "run" ]; then
-        python3.8 "./$dirsource/LinexWeb.py" "$1"
+        $pythonrun "./$dirsource/$scriptrunpy" "$1"
 	fi
     if [ "$command" == "exit" ]; then
 		#break
@@ -144,7 +151,7 @@ do
     current_time=$(date +%d.%m.%Y\ %T) # тикущая дата
     echo "-------------------------$current_time--------------------------"
     echo "Платформа: $distributivelinex"
-    echo "Версия: $numberversionlinex"
+    #echo "Версия: $numberversionlinex"
     access_linex
     main "$distributivelinex"
     #if [ "$distributivelinex" == "Ubuntu" ]; then
