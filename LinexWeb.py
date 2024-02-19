@@ -3,6 +3,9 @@ from Web_Share_Core import Web_Core
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
+dir_projects = "projects"
+dir_projects_downloads = "projects_downloads"
+
 app = Web_Core()
 
 platform_name=sys.argv[1] #Получить Платформу для доступа
@@ -65,7 +68,16 @@ def Main():
             os.system("systemctl restart networking.service")
             print("Сеть Перезагружена!")
         if result=="4":
-            pass 
+            nameproject = app.InputWhile("Имя Проекта: ")
+            path_download = f"{dir_path}/{dir_projects}/{nameproject}.7z"
+            urlproject = app.InputWhile("Ccылка На Проект: ")
+            result_down=app.DownloadFile(urlproject, path_download)
+            if result_down==True:
+                command = f'7z x "{path_download}" -o{dir_path}/{dir_projects}'
+                os.system(command)
+                print(f"Проект {nameproject} Загружен!")
+            else:
+                print("Ошыбка Загрузки!")
         if result=="5":
             pass 
         if result=="6":
