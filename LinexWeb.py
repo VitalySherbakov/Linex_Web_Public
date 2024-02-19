@@ -25,7 +25,7 @@ def Main():
         print(f"---------------------------------------------------")
         print(f"1) Список Проектов")
         print(f"2) Список Сервисов")
-        print(f"3) Установить IP Адресс")
+        print(f"3) Установить IP Адресс (Ubuntu, Debian)")
         print(f"4) Скачать Проект")
         print(f"5) Запуск Проекта Опубликовать")
         print(f"6) Очистить Консоль")
@@ -36,7 +36,20 @@ def Main():
         if result=="2":
             pass
         if result=="3":
-            pass
+            interface = app.InputWhile("Интерфейс enp0s3: ")
+            ipmashen = app.InputWhile("IP Машыны: ")
+            iprouter = app.InputWhile("IP Роутер: ")
+            listips=[
+                f"auto {interface}",
+                f"iface {interface} inet static",
+                f"   address {ipmashen}",
+                # f"   broadcast 192.168.0.255",
+                # f"   network 192.168.0.0",
+                f"   gateway {iprouter}"
+                ]
+            app.WriteFile("/etc/network/interfaces",listips)
+            os.system("systemctl restart networking.service")
+            print("Сеть Перезагружена!")
         if result=="4":
             pass 
         if result=="5":

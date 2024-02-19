@@ -70,6 +70,17 @@ class Web_Core(object):
         else:
             res_file[2]=f"Нету файла {pathfile}!"
         return res_file
+    def WriteFile(self, pathfile: str, content: list, encod="utf-8")->list:
+        """Запись Файла"""
+        res_file=[False,None,""]
+        try:
+            with open(pathfile, "w", encoding=encod) as fi:
+                fi.writelines(content)
+            res_file[1] = content
+            res_file[0] = True
+        except Exception as ex:
+            res_file[2]=f"ERROR: {ex}!"
+        return res_file
     def ReadFile(self, pathfile: str, method: int, encod="utf-8")->list:
         """Чтение Файла Полностью
             method -> 1 - читает полностью файл
