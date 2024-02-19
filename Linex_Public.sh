@@ -2,8 +2,9 @@ versionscript=1.014
 echo "Установка и Работа Linex Web Public SV (Щ.В) (v $versionscript)"
 distributivelinex=$(uname -a)
 numberversionlinex=$(uname -a)
+dirhome="${PWD}"
 dirsource="Linex_Web_Public"
-scriptrun="${PWD}"
+scriptrun=$(basename -- "$0")
 echo "Скрипт: $scriptrun"
 
 function function_python(){
