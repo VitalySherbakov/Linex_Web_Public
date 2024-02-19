@@ -1,4 +1,4 @@
-import os, sys, time, datetime, json, socket
+import os, sys, time, datetime, json, socket, subprocess
 from requests import get
 import urllib.request
 
@@ -18,8 +18,7 @@ class Web_Core(object):
         return Res
     def GetIP_Mashune(self):
         """Тикущий IP Машыны"""
-        hostname = socket.gethostname()
-        IPAddr = socket.gethostbyname(hostname)
+        IPAddr=subprocess.run(["ip", "route"], capture_output=True, text=True)
         return IPAddr
     def GetIP(self)->list:
         """Получить IP Внешний"""
