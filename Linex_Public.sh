@@ -1,9 +1,10 @@
 versionscript=1.014
-echo "Скрипт выполнен из: ${PWD}"
 echo "Установка и Работа Linex Web Public SV (Щ.В) (v $versionscript)"
 distributivelinex=$(uname -a)
 numberversionlinex=$(uname -a)
 dirsource="Linex_Web_Public"
+scriptrun="${PWD}"
+echo "Скрипт: $scriptrun"
 
 function function_python(){
     apt update -y
