@@ -40,11 +40,11 @@ def Main():
             ipmashen = app.InputWhile("IP Машыны: ")
             iprouter = app.InputWhile("IP Роутер: ")
             contentip=f"""
-                auto {interface}
-
-                iface {interface} inet static
-                   address {ipmashen}
-                   gateway {iprouter}
+            auto {interface}
+            
+            iface {interface} inet static
+                address {ipmashen}
+                gateway {iprouter}
                 """
             resultnewadd = app.InputWhile("Добавить дополнительные IP Y/N: ")
             if resultnewadd.lower()=="y":
@@ -55,7 +55,7 @@ def Main():
                     ipmashennew = app.InputWhile(f"{li}) IP Машыны: ")
                     iprouternew = app.InputWhile(f"{li}) IP Роутер: ")
                     contentipnew=f"""
-                        iface {interfacenew} inet static
+                    iface {interfacenew} inet static
                         address {ipmashennew}
                         gateway {iprouternew}
                         """
