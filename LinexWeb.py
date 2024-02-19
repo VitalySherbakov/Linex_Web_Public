@@ -39,13 +39,13 @@ def Main():
             interface = app.InputWhile("Интерфейс enp0s3: ")
             ipmashen = app.InputWhile("IP Машыны: ")
             iprouter = app.InputWhile("IP Роутер: ")
-            contentip=f"""
-            auto {interface}
-            
-            iface {interface} inet static
-                address {ipmashen}
-                gateway {iprouter}
-                """
+            contentip=[
+                f"auto {interface}",
+                "",
+                "iface {interface} inet static",
+                f"  address {ipmashen}"
+                f"  gateway {iprouter}"
+                ]
             resultnewadd = app.InputWhile("Добавить дополнительные IP Y/N: ")
             if resultnewadd.lower()=="y":
                 resultcounts = app.InputWhile("Количество Адресов: ")
@@ -54,11 +54,11 @@ def Main():
                     interfacenew = app.InputWhile(f"{li}) Интерфейс enp0s3: ")
                     ipmashennew = app.InputWhile(f"{li}) IP Машыны: ")
                     iprouternew = app.InputWhile(f"{li}) IP Роутер: ")
-                    contentipnew=f"""
-                    iface {interfacenew} inet static
-                        address {ipmashennew}
-                        gateway {iprouternew}
-                        """
+                    contentipnew=[
+                        f"iface {interfacenew} inet static"
+                        f"  address {ipmashennew}"
+                        f"  gateway {iprouternew}"
+                        ]
                     contentip+=contentipnew
             app.WriteFile("/etc/network/interfaces",contentip)
             os.system("systemctl restart NetworkManager")
