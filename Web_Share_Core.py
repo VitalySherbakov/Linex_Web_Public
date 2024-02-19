@@ -73,10 +73,10 @@ class Web_Core(object):
     def WriteFile(self, pathfile: str, content: list, encod="utf-8")->list:
         """Запись Файла"""
         res_file=[False,None,""]
-        contentnew=[]
+        contentnew=""
         try:
             for li in content:
-                contentnew.append(f"{li}\n")
+                contentnew+=li
             with open(pathfile, "w", encoding=encod) as fi:
                 fi.write(contentnew)
             res_file[1] = contentnew

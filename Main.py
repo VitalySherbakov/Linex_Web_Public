@@ -1,9 +1,31 @@
 import subprocess
+from Web_Share_Core import Web_Core
 
-result="CompletedProcess(args=['ip', 'route'], returncode=0, stdout='default via 192.168.134.1 dev enp0s3 proto dhcp metric 100 \n192.168.134.0/24 dev enp0s3 proto kernel scope link src 192.168.134.101 metric 100 \n', stderr='')"
-if result.returncode == 0:
-    stdout_lines = result.stdout.splitlines()
-    for line in stdout_lines:
-        print(line)
-else:
-    print("Ошибка выполнения команды")
+app=Web_Core()
+
+interface = app.InputWhile("Интерфейс enp0s3: ")
+ipmashen = app.InputWhile("IP Машыны: ")
+iprouter = app.InputWhile("IP Роутер: ")
+contentip=[
+    f"auto {interface}\n",
+    "",
+    f"iface {interface} inet static\n",
+    f"  address {ipmashen}\n"
+    f"  gateway {iprouter}\n"
+    ]
+resultnewadd = app.InputWhile("Добавить дополнительные IP Y/N: ")
+if resultnewadd.lower()=="y":
+    resultcounts = app.InputWhile("Количество Адресов: ")
+    contsips=int(resultcounts)
+    for li in range(0,contsips):
+        interfacenew = app.InputWhile(f"{li}) Интерфейс enp0s3: ")
+        ipmashennew = app.InputWhile(f"{li}) IP Машыны: ")
+        iprouternew = app.InputWhile(f"{li}) IP Роутер: ")
+        contentipnew=[
+            f"iface {interfacenew} inet static\n"
+            f"  address {ipmashennew}\n"
+            f"  gateway {iprouternew}\n"
+            ]
+        contentip+=contentipnew
+print(contentip)
+app.WriteFile("interfaces",contentip)

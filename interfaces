@@ -1,0 +1,10 @@
+auto enp0s3
+iface enp0s3 inet static
+  address 192.168.134.101
+  gateway 192.168.134.1
+iface enp0s3 inet static
+  address 192.168.134.102
+  gateway 192.168.134.1
+iface enp0s3 inet static
+  address 192.168.134.103
+  gateway 192.168.134.1
