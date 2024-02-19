@@ -1,4 +1,4 @@
-import os, sys, time, datetime, json
+import os, sys, time, datetime, json, socket
 from requests import get
 import urllib.request
 
@@ -6,7 +6,7 @@ class Web_Core(object):
     """Публикация Сайта"""
     def __init__(self):
         pass
-    def InputWhile(self, text: str):
+    def InputWhile(self, text: str)->str:
         """Ввод Данных Цыкловый"""
         Flag,Res=True,""
         while Flag:
@@ -16,6 +16,11 @@ class Web_Core(object):
             else:
                 Flag=False
         return Res
+    def GetIP_Mashune(self):
+        """Тикущий IP Машыны"""
+        hostname = socket.gethostname()
+        IPAddr = socket.gethostbyname(hostname)
+        return IPAddr
     def GetIP(self)->list:
         """Получить IP Внешний"""
         ip_res=[False,"",""]
@@ -87,10 +92,10 @@ class Web_Core(object):
         else:
             res_file[2]=f"Нету файла {pathfile}!"
         return res_file
-    def Pause(self):
+    def Pause(self)->None:
         """Пауза"""
         input("-------------------Enter-------------------")
-    def PauseProcess(self):
+    def PauseProcess(self)->None:
         """Пауза 2"""
         input("-------------Начать-------------")
     
