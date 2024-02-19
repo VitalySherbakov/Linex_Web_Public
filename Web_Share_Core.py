@@ -70,16 +70,13 @@ class Web_Core(object):
         else:
             res_file[2]=f"Нету файла {pathfile}!"
         return res_file
-    def WriteFile(self, pathfile: str, content: list, encod="utf-8")->list:
+    def WriteFile(self, pathfile: str, content: str, encod="utf-8")->list:
         """Запись Файла"""
         res_file=[False,None,""]
-        contenttext: str=""
         try:
-            for li in content:
-                contenttext+=f"{li}\n"
             with open(pathfile, "w", encoding=encod) as fi:
-                fi.write(contenttext)
-            res_file[1] = contenttext
+                fi.write(content)
+            res_file[1] = content
             res_file[0] = True
         except Exception as ex:
             res_file[2]=f"ERROR: {ex}!"
