@@ -18,7 +18,7 @@ class Web_Core(object):
         return Res
     def GetIP_Mashune(self):
         """Тикущий IP Машыны"""
-        IPAddr=subprocess.run(["ip", "route"], capture_output=True, text=True)
+        IPAddr=subprocess.run(["ip", "route"], capture_output=False, text=True)
         return IPAddr
     def GetIP(self)->list:
         """Получить IP Внешний"""
