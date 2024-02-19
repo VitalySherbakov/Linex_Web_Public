@@ -57,7 +57,7 @@ function function_pack2(){
 	exit
 }
 
-function access_ubuntu(){
+function access_linex(){
 	# Ubuntu полный доступ к папке
 	nameuser=$USER
 	chmod -R 777 "$dirsource/"
@@ -81,24 +81,24 @@ function main(){
         echo "Вы Уверены в Удалении Программы Y/N"
         read command2
         if [ "$command2" == "y" ]; then
-            access_ubuntu
+            access_linex
             auto_remove_program
             echo "Программа $dirsource Удалена!"
             exit
         fi
         if [ "$command2" == "Y" ]; then
-            access_ubuntu
+            access_linex
             auto_remove_program
             echo "Программа $dirsource Удалена!"
             exit
         fi
 	fi
     if [ "$command" == "pack" ]; then
-        access_ubuntu
+        access_linex
 		function_pack2
 	fi
     if [ "$command" == "cpu" ]; then
-        access_ubuntu
+        access_linex
 		function_install_cpu
 	fi
     if [ "$command" == "run" ]; then
@@ -116,10 +116,10 @@ do
     echo "-------------------------$current_time--------------------------"
     echo "Платформа: $distributivelinex"
     echo "Версия: $numberversionlinex"
-    access_ubuntu
+    access_linex
     main "$distributivelinex"
     #if [ "$distributivelinex" == "Ubuntu" ]; then
-        #access_ubuntu
+        #access_linex
         #main "$distributivelinex"
     #fi
     read -p "Нажмите Enter, чтобы продолжить"
