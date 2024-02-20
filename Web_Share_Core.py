@@ -211,9 +211,61 @@ class Web_Projects(object):
         try:
             name=content["Name"]
             res, err=self.FindBool(name, encod); 
+            if res==False:
+                res2, listing2, err2= self.__App.ReadJson(self.__PathProject, encod)
+                if res2==True:
+                    listing2: list=listing2
+                    listing2.append(content)
+                    self.__App.WriteJson(self.__PathProject,listing2, encod)
+                    result[0]=True
+                else:
+                    result[1]=err2
+            else:
+                result[1]=err
+        except Exception as ex:
+            result[1]=f"Ошыбка: {ex}!"
+        return result
+    def Del(self, content: dict, encod="utf-8")->list:
+        """Удалить"""
+        result=[False,""]
+        try:
+            name=content["Name"]
+            res, err=self.FindBool(name, encod); 
             if res==True:
-                
-                result[0]=True
+                res2, listing2, err2= self.__App.ReadJson(self.__PathProject, encod)
+                if res2==True:
+                    listing2: list=listing2
+                    for li in listing2:
+                        if li["Name"]==name:
+                            listing2.remove(li)
+                            result[0]=True
+                            break #Прерывание не продолжать крутить цыкл
+                    self.__App.WriteJson(self.__PathProject,listing2, encod)
+                else:
+                    result[1]=err2
+            else:
+                result[1]=err
+        except Exception as ex:
+            result[1]=f"Ошыбка: {ex}!"
+        return result
+    
+    def DelName(self, name: str, encod="utf-8")->list:
+        """Удалить по Имени"""
+        result=[False,""]
+        try:
+            res, err=self.FindBool(name, encod); 
+            if res==True:
+                res2, listing2, err2= self.__App.ReadJson(self.__PathProject, encod)
+                if res2==True:
+                    listing2: list=listing2
+                    for li in listing2:
+                        if li["Name"]==name:
+                            listing2.remove(li)
+                            result[0]=True
+                            break #Прерывание не продолжать крутить цыкл
+                    self.__App.WriteJson(self.__PathProject,listing2, encod)
+                else:
+                    result[1]=err2
             else:
                 result[1]=err
         except Exception as ex:

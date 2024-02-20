@@ -1,7 +1,1 @@
-[
-    {
-        "Name": "server",
-        "Dir_Project": "serverdir",
-        "ServiceFile": "server.service"
-    }
-]
+[{"Name": "server", "NginxFile": "", "Dir_Project": "serverdir", "Core": "core6", "ServiceFile": "server.service"}]

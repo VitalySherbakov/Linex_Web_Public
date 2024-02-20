@@ -51,8 +51,32 @@ setting=Web_Projects()
 # else:
 #     print("Ошыбка Загрузки!")
 
-res, err=setting.Find("server")
-if res:
-    print(res)
+# res, content , err=setting.Find("server2")
+# res: bool=res
+# tes=True
+# if res==True:
+#     print(f"R: {res}")
+# else:
+#     print(f"Err: {err}")
+
+dic={
+        "Name": "server2",
+        "NginxFile": "1",
+        "Dir_Project": "serverdir1",
+        "Core": "core6",
+        "ServiceFile": "server1.service"
+    }
+
+
+# res, err=setting.Add(dic)
+# if res==True:
+#     print("Добавлен")
+# else:
+#     print("Уже есть!")
+
+res, err=setting.DelName("server2")
+if res==True:
+    print("Удален")
 else:
     print(err)
+    print("Нету!")
