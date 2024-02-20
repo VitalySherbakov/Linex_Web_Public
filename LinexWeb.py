@@ -17,6 +17,10 @@ print(f"Платформа: {platform_name}")
 print(f"Папка: {dir_path}")
 
 def Main():
+    if os.path.exists(f"{dir_path}/{dir_projects}")==False:
+        os.mkdir(f"{dir_path}/{dir_projects}")
+    if os.path.exists(f"{dir_path}/{dir_projects_downloads}")==False:
+        os.mkdir(f"{dir_path}/{dir_projects_downloads}")
     while True:
         res_router,ip_router,err_router = app.GetIP() 
         current_date = datetime.datetime.now()

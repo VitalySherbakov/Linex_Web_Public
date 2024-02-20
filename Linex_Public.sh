@@ -65,15 +65,15 @@ function function_nginx(){
     sudo ufw status
 }
 
-function function_projects(){
-    # projects
-    cd "$dirsource"
-    mkdir projects
-    mkdir projects_downloads
-    sudo chmod -R 777 projects
-    sudo chmod -R 777 projects_downloads
-    cd ..
-}
+# function function_projects(){
+#     # projects
+#     cd "$dirsource"
+#     mkdir projects
+#     mkdir projects_downloads
+#     sudo chmod -R 777 projects
+#     sudo chmod -R 777 projects_downloads
+#     cd ..
+# }
 
 function function_pack2(){
     # Установка Пакетов
@@ -94,7 +94,7 @@ function function_pack2(){
     function_python
     function_core6
     function_nginx
-    function_projects
+    #function_projects
     echo "-----Конец Установки Пакетов-----"
 	echo "Авто Выход с Скрипта"
 	echo "Повторно Войдите в Скрипт Командой"
@@ -114,7 +114,6 @@ function auto_remove_program(){
 # -----------------------------------------------------
 
 function main(){
-    function_projects
     # Основное Меню
     echo "Команда: pack (Установка необходимых пакетов)"
     echo "Команда: run (Запуск Скрипта)"
