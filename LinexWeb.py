@@ -19,6 +19,8 @@ print(f"Папка: {dir_path}")
 def Main():
     dir_project=f"{dir_path}/{dir_projects}"
     dir_projects_downloads=f"{dir_path}/{dir_projects_downloads}"
+    print(f"D1: {dir_project}")
+    print(f"D2: {dir_projects_downloads}")
     if os.path.exists(dir_project)==False:
         os.mkdir(dir_project)
     if os.path.exists(dir_projects_downloads)==False:
