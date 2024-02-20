@@ -17,14 +17,14 @@ print(f"Платформа: {platform_name}")
 print(f"Папка: {dir_path}")
 
 def Main():
-    dir_project=f"{dir_path}/{dir_projects}"
-    dir_projects_downloads=f"{dir_path}/{dir_projects_downloads}"
-    print(f"D1: {dir_project}")
-    print(f"D2: {dir_projects_downloads}")
-    if os.path.exists(dir_project)==False:
-        os.mkdir(dir_project)
-    if os.path.exists(dir_projects_downloads)==False:
-        os.mkdir(dir_projects_downloads)
+    dir_projectnew=f"{dir_path}/{dir_projects}"
+    dir_projects_downloadsnew=f"{dir_path}/{dir_projects_downloads}"
+    print(f"D1: {dir_projectnew}")
+    print(f"D2: {dir_projects_downloadsnew}")
+    if os.path.exists(dir_projectnew)==False:
+        os.mkdir(dir_projectnew)
+    if os.path.exists(dir_projects_downloadsnew)==False:
+        os.mkdir(dir_projects_downloadsnew)
     while True:
         res_router,ip_router,err_router = app.GetIP() 
         current_date = datetime.datetime.now()
