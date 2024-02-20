@@ -288,19 +288,22 @@ class Project_Nginx(object):
     """Файл для Nginx"""
     Service_File: str=""
     """Файл Сервиса"""
+    IP: str = "127.0.0.1"
+    """IP Машыны для Хоста"""
     Host: str=""
     """Хост Проекта"""
     HostRun: str=""
     """Хост Запущен Проект"""
     Port: int=80
     """Порт"""
-    def __init__(self, nameproject: str, dir_path: str, dir_projects: str, core: str, nginx_file: str, service_file: str, host: str, hostrun: str, port: int):
+    def __init__(self, nameproject: str, dir_path: str, dir_projects: str, core: str, nginx_file: str, service_file: str, ip: str, host: str, hostrun: str, port: int):
         self.NameProject=nameproject
         self.Dir_Path=dir_path
         self.Dir_Projects=dir_projects
         self.Core=core
         self.Nginx_File=nginx_file
         self.Service_File=service_file
+        self.IP=ip
         self.Host=host
         self.HostRun=hostrun
         self.Port=port
@@ -377,6 +380,9 @@ class Web_Nginx_Core(object):
         """Коректировать Раскоментить"""
         pathfile="/etc/nginx/nginx.conf"
         correct="server_names_hash_bucket_size 64"
-    def LinexHost(self, ip: str, host: str):
+    def LinexHost_Add(self, ip: str, host: str):
         """Прописать Хост"""
+        pathfile="/etc/hosts"
+    def LinexHost_Del(self, ip: str, host: str):
+        """Удалить Хост"""
         pathfile="/etc/hosts"

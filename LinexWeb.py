@@ -83,6 +83,7 @@ def Main():
         if result=="4":
             nameproject = app.InputWhile("Имя Проекта: ")
             arhiveproject = app.InputWhile("Имя Файл Архива: ")
+            ipproject = app.InputWhile("IP для Хоста: ")
             hostproject = app.InputWhile("Хост Сайта или IP: ")
             portproject = app.InputWhile("Порт Трансляции: ")
             hostrunproject = app.InputWhile("Хост Запущеного Проекта или IP: ")
@@ -109,6 +110,7 @@ def Main():
                         core=project["Core"],
                         nginx_file=project["NginxFile"],
                         service_file=project["ServiceFile"],
+                        ip=ipproject,
                         host=hostproject,
                         hostrun=hostrunproject,
                         port=portproject
