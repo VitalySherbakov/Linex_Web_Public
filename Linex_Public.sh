@@ -67,10 +67,12 @@ function function_nginx(){
 
 function function_projects(){
     # projects
+    cd "$dirsource"
     mkdir projects
     mkdir projects_downloads
     sudo chmod -R 777 projects
     sudo chmod -R 777 projects_downloads
+    cd ..
 }
 
 function function_pack2(){

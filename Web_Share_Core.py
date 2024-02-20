@@ -73,6 +73,17 @@ class Web_Core(object):
         else:
             res_file[2]=f"Нету файла {pathfile}!"
         return res_file
+    def WriteJson(self, pathfile: str, content: dict, encod="utf-8")->list:
+        """Запись JSON"""
+        result=[False,""]
+        try:
+            with open(pathfile, "w", encoding=encod) as json_file:
+                # Записываем данные в файл в формате JSON
+                json.dump(content, json_file)
+            result[0]=True
+        except Exception as ex:
+            result[1]=f"Ошыбка Записи: {ex}!"
+        return result
     def WriteFile(self, pathfile: str, content: list, encod="utf-8")->list:
         """Запись Файла"""
         res_file=[False,None,""]
@@ -155,4 +166,56 @@ class Web_Core(object):
     def PauseProcess(self)->None:
         """Пауза 2"""
         input("-------------Начать-------------")
-    
+
+
+class Web_Projects(object):
+    """Веб Настройка"""
+    __PathProject: str="Projects.json"
+    """Файл Проекта"""
+    __App: Web_Core=None
+    """Функционал"""
+    def __init__(self):
+        self.__App=Web_Core()
+    def FindBool(self, name_project: str, encod="utf-8")->list:
+        """Поиск Проекта"""
+        result=[False,""]
+        try:
+            res, data, err = self.__App.ReadJson(self.__PathProject, encod)
+            if res==True and data!=None:
+                found_items = [item for item in data if item["Name"] == name_project]
+                if found_items:
+                    result[0]=True
+            else:
+                result[1]=f"Ошыбка {self.__PathProject}: {err}!"
+        except Exception as ex:
+            result[1]=f"Ошыбка: {ex}!"
+        return result
+    def Find(self, name_project: str, encod="utf-8")->list:
+        """Поиск Проекта"""
+        result=[False,None,""]
+        try:
+            res, data, err = self.__App.ReadJson(self.__PathProject, encod)
+            if res==True and data!=None:
+                found_items = [item for item in data if item["Name"] == name_project]
+                if found_items:
+                    result[1]=found_items
+                    result[0]=True
+            else:
+                result[2]=f"Ошыбка {self.__PathProject}: {err}!"
+        except Exception as ex:
+            result[2]=f"Ошыбка: {ex}!"
+        return result
+    def Add(self, content: dict, encod="utf-8")->list:
+        """Добавить"""
+        result=[False,""]
+        try:
+            name=content["Name"]
+            res, err=self.FindBool(name, encod); 
+            if res==True:
+                
+                result[0]=True
+            else:
+                result[1]=err
+        except Exception as ex:
+            result[1]=f"Ошыбка: {ex}!"
+        return result

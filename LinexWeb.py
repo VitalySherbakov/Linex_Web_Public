@@ -69,6 +69,7 @@ def Main():
             print("Сеть Перезагружена!")
         if result=="4":
             nameproject = app.InputWhile("Имя Проекта: ")
+            arhiveproject = app.InputWhile("Файл Архива: ")
             path_download = f"{dir_path}/{dir_projects_downloads}/{nameproject}.7z"
             urlproject = app.InputWhile("Ccылка На Проект: ")
             result_down=app.DownloadFile(urlproject, path_download)

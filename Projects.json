@@ -1,0 +1,7 @@
+[
+    {
+        "Name": "server",
+        "Dir_Project": "serverdir",
+        "ServiceFile": "server.service"
+    }
+]
