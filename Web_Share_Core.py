@@ -169,12 +169,14 @@ class Web_Core(object):
 
 
 class Web_Projects(object):
-    """Веб Настройка"""
+    """Веб Проекты"""
     __PathProject: str="Projects.json"
     """Файл Проекта"""
     __App: Web_Core=None
     """Функционал"""
-    def __init__(self):
+    def __init__(self, pathproject: str):
+        """Веб Проекты"""
+        self.__PathProject=pathproject
         self.__App=Web_Core()
     def FindBool(self, name_project: str, encod="utf-8")->list:
         """Поиск Проекта"""

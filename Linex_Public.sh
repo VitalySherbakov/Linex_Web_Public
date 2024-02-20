@@ -114,6 +114,7 @@ function auto_remove_program(){
 # -----------------------------------------------------
 
 function main(){
+    function_projects
     # Основное Меню
     echo "Команда: pack (Установка необходимых пакетов)"
     echo "Команда: run (Запуск Скрипта)"

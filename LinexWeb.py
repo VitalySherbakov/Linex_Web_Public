@@ -1,10 +1,13 @@
 import os,sys,json, datetime
 from Web_Share_Core import Web_Core
+from typing import Literal
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
-dir_projects = "projects"
-dir_projects_downloads = "projects_downloads"
+# Константы
+dir_projects: Literal["projects"] = "projects"
+dir_projects_downloads: Literal["projects_downloads"] = "projects_downloads"
+file_project: Literal["Projects.json"]="Projects.json"
 
 app = Web_Core()
 
@@ -69,8 +72,8 @@ def Main():
             print("Сеть Перезагружена!")
         if result=="4":
             nameproject = app.InputWhile("Имя Проекта: ")
-            arhiveproject = app.InputWhile("Файл Архива: ")
-            path_download = f"{dir_path}/{dir_projects_downloads}/{nameproject}.7z"
+            arhiveproject = app.InputWhile("Имя Файл Архива: ")
+            path_download = f"{dir_path}/{dir_projects_downloads}/{arhiveproject}.7z"
             urlproject = app.InputWhile("Ccылка На Проект: ")
             result_down=app.DownloadFile(urlproject, path_download)
             if result_down==True:

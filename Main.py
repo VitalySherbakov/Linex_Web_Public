@@ -74,9 +74,9 @@ dic={
 # else:
 #     print("Уже есть!")
 
-res, err=setting.DelName("server2")
-if res==True:
-    print("Удален")
-else:
-    print(err)
-    print("Нету!")
+# res, err=setting.DelName("server2")
+# if res==True:
+#     print("Удален")
+# else:
+#     print(err)
+#     print("Нету!")
