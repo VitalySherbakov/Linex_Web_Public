@@ -273,3 +273,110 @@ class Web_Projects(object):
         except Exception as ex:
             result[1]=f"Ошыбка: {ex}!"
         return result
+
+class Project_Nginx(object):
+    """Проект Nginx"""
+    NameProject: str=""
+    """Имя Проекта"""
+    Dir_Path: str=""
+    """Папка Самой Программы"""
+    Dir_Projects: str=""
+    """Папка с Проектами"""
+    Core: str="core6"
+    """Ядро Проекта"""
+    Nginx_File: str=""
+    """Файл для Nginx"""
+    Service_File: str=""
+    """Файл Сервиса"""
+    Host: str=""
+    """Хост Проекта"""
+    HostRun: str=""
+    """Хост Запущен Проект"""
+    Port: int=80
+    """Порт"""
+    def __init__(self, nameproject: str, dir_path: str, dir_projects: str, core: str, nginx_file: str, service_file: str, host: str, hostrun: str, port: int):
+        self.NameProject=nameproject
+        self.Dir_Path=dir_path
+        self.Dir_Projects=dir_projects
+        self.Core=core
+        self.Nginx_File=nginx_file
+        self.Service_File=service_file
+        self.Host=host
+        self.HostRun=hostrun
+        self.Port=port
+
+class Web_Nginx_Core(object):
+    """Веб Настройка Использование Ядра Запуска Nginx"""
+    __App: Web_Core=None
+    """Функционал"""
+    def __init__(self):
+        """Веб Проекты"""
+        self.__App=Web_Core()
+    def CreateSettingProject(self, project: Project_Nginx):
+        # Выбор Настройки
+        if project.Core=="core6":
+            # Прописываем Файл для Nginx
+            if os.path.exists(project.Nginx_File)==True:
+                # Если есть удалить для Перезаписи
+                os.remove(project.Nginx_File)
+            # Создать Файл Nginx
+            content_nginx=[
+                "server {",
+                f"   listen {project.Port};",
+                f"   server_name {project.Host};",
+                "",
+                "   location / {",
+                f"      proxy_pass {project.HostRun};",
+                "       proxy_http_version 1.1;",
+                "       proxy_set_header Upgrade $http_upgrade;",
+                "       proxy_set_header Connection keep-alive;",
+                "       proxy_set_header Host $host;",
+                "       proxy_cache_bypass $http_upgrade;",
+                "       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;",
+                "       proxy_set_header X-Forwarded-Proto $scheme;",
+                "   }",
+                "}"
+                ]                    
+            res2,content2, err2=self.__App.WriteFile(project.Nginx_File,content_nginx)
+            if res2==True:
+                os.system(f'sudo ln -s {project.Nginx_File} /etc/nginx/sites-enabled/')
+                print(f"Настройки {project.NameProject} Сайта Созданы!")
+            # Создание Сервиса для Запуска Проекта
+            if os.path.exists(project.Service_File)==True:
+                # Если есть удалить для Перезаписи
+                os.remove(project.Service_File)
+            # Создать Файл Сервиса
+            content_service=[
+                '[Unit]',
+                f'Description=Проект {project.NameProject}',
+                '[Service]',
+                f'WorkingDirectory={project.Dir_Path}/{project.Dir_Projects}/Server_Testing2000',
+                f'ExecStart=/usr/bin/dotnet "{project.Dir_Path}/{project.Dir_Projects}/Server_Testing2000/BlazorApp_CompilationTest.dll"',
+                'Restart=always',
+                f'# Перезапустите службу через 10 секунд, если служба выйдет из строя.:',
+                'RestartSec=10',
+                'KillSignal=SIGINT',
+                f'SyslogIdentifier={project.NameProject}',
+                'User=www-data',
+                'Environment=ASPNETCORE_ENVIRONMENT=Production',
+                'Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false',
+                '',
+                '[Install]',
+                'WantedBy=multi-user.target'
+                ]
+            res3,content3, err3=self.__App.WriteFile(project["ServiceFile"],content_service)
+            if res3==True:
+                os.system(f"sudo systemctl enable {project.NameProject}.service")
+                os.system(f"sudo systemctl start {project.NameProject}.service")
+                os.system(f"sudo systemctl restart {project.NameProject}.service")
+                os.system(f"sudo systemctl status {project.NameProject}.service")
+                print(f"Настройки Сервиса {project.NameProject} Сайта Созданы!")
+            # До настройки
+            self.NginxConf()
+    def NginxConf(self):
+        """Коректировать Раскоментить"""
+        pathfile="/etc/nginx/nginx.conf"
+        correct="server_names_hash_bucket_size 64"
+    def LinexHost(self, ip: str, host: str):
+        """Прописать Хост"""
+        pathfile="/etc/hosts"

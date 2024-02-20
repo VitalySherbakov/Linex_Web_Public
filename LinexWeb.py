@@ -1,5 +1,5 @@
 import os,sys,json, datetime
-from Web_Share_Core import Web_Core
+from Web_Share_Core import Web_Core, Web_Projects, Web_Nginx_Core, Project_Nginx
 from typing import Literal
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -8,8 +8,10 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 dir_projects: Literal["projects"] = "projects"
 dir_projects_downloads: Literal["projects_downloads"] = "projects_downloads"
 file_project: Literal["Projects.json"]="Projects.json"
-
+# Зависимости
 app = Web_Core()
+proj_setting = Web_Projects(file_project)
+proj_nginx = Web_Nginx_Core()
 
 platform_name=sys.argv[1] #Получить Платформу для доступа
 print(f"---------------------------------------------------")
@@ -17,14 +19,14 @@ print(f"Платформа: {platform_name}")
 print(f"Папка: {dir_path}")
 
 def Main():
+    # Создание Папок для Проектов
     dir_projectnew=f"{dir_path}/{dir_projects}"
     dir_projects_downloadsnew=f"{dir_path}/{dir_projects_downloads}"
-    print(f"D1: {dir_projectnew}")
-    print(f"D2: {dir_projects_downloadsnew}")
     if os.path.exists(dir_projectnew)==False:
         os.mkdir(dir_projectnew)
     if os.path.exists(dir_projects_downloadsnew)==False:
         os.mkdir(dir_projects_downloadsnew)
+    # Меню
     while True:
         res_router,ip_router,err_router = app.GetIP() 
         current_date = datetime.datetime.now()
@@ -81,13 +83,40 @@ def Main():
         if result=="4":
             nameproject = app.InputWhile("Имя Проекта: ")
             arhiveproject = app.InputWhile("Имя Файл Архива: ")
+            hostproject = app.InputWhile("Хост Сайта или IP: ")
+            portproject = app.InputWhile("Порт Трансляции: ")
+            hostrunproject = app.InputWhile("Хост Запущеного Проекта или IP: ")
             path_download = f"{dir_path}/{dir_projects_downloads}/{arhiveproject}.7z"
             urlproject = app.InputWhile("Ccылка На Проект: ")
             result_down=app.DownloadFile(urlproject, path_download)
             if result_down==True:
                 command = f'7z x "{path_download}" -o{dir_path}/{dir_projects}'
                 os.system(command)
-                print(f"Проект {nameproject} Загружен!")
+                project={
+                    "Name": nameproject, 
+                    "NginxFile": f"/etc/nginx/sites-available/{nameproject}", 
+                    "Dir_Project": "serverdir", 
+                    "Core": "core6", 
+                    "ServiceFile": f"/etc/systemd/system/{nameproject}.service"
+                }
+                resadd, err=proj_setting.Add(project)
+                if resadd==True:
+                    print(f"Проект {nameproject} Загружен!")
+                    project_nginx = Project_Nginx(
+                        nameproject=nameproject,
+                        dir_path=dir_path,
+                        dir_projects=dir_projects,
+                        core=project["Core"],
+                        nginx_file=project["NginxFile"],
+                        service_file=project["ServiceFile"],
+                        host=hostproject,
+                        hostrun=hostrunproject,
+                        port=portproject
+                    )
+                    proj_nginx.CreateSettingProject(project_nginx)
+                else:
+                    print(f"Или Ошыбка Проекта {nameproject}, или он уже есть!")
+                    print(f"Ошыбка Проекта: {err}")
             else:
                 print("Ошыбка Загрузки!")
         if result=="5":
