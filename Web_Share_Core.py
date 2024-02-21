@@ -334,9 +334,9 @@ class Web_Nginx_Core(object):
                 # Если есть удалить для Перезаписи
                 os.remove(f"/etc/nginx/sites-available/{project.Nginx_File}")
             # Удаляем Nginx Файл
-            if os.path.exists(f"/etc/nginx/sites-enabled/{project.NameProject}")==True:
+            if os.path.exists(f"/etc/nginx/sites-enabled/{project.Nginx_File}")==True:
                 # Если есть удалить для Перезаписи
-                os.remove(f"/etc/nginx/sites-enabled/{project.NameProject}")
+                os.remove(f"/etc/nginx/sites-enabled/{project.Nginx_File}")
             self.__App.PauseWrite("Тестинг1")
             # Создать Файл Nginx
             content_nginx=[
