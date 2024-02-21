@@ -86,6 +86,11 @@ function function_snapd(){
     sudo systemctl restart nginx
 }
 
+function function_tor(){
+    # Установка Tor Сети
+    sudo apt install tor -y
+}
+
 function function_pack2(){
     # Установка Пакетов
     echo "Обновление..."
@@ -106,6 +111,7 @@ function function_pack2(){
     function_core6
     function_nginx
     function_snapd
+    function_tor
     #function_projects
     echo "-----Конец Установки Пакетов-----"
 	echo "Авто Выход с Скрипта"
