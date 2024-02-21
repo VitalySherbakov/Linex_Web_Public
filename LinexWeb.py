@@ -83,20 +83,30 @@ def Main():
         if result=="4":
             nameproject = app.InputWhile("Имя Проекта: ")
             arhiveproject = app.InputWhile("Имя Файл Архива: ")
-            ipproject = app.InputWhile("IP для Хоста: ")
-            hostproject = app.InputWhile("Хост Сайта или IP: ")
+            filerunproject = app.InputWhile("Запускаймый Файл: ")
+            ipproject = app.InputWhile("IP Машины: ")
+            hostproject = app.InputWhile("Хост Сайта: ")
             portproject = app.InputWhile("Порт Трансляции: ")
-            hostrunproject = app.InputWhile("Хост Запущеного Проекта или IP: ")
-            path_download = f"{dir_path}/{dir_projects_downloads}/{arhiveproject}.7z"
+            hostrunproject = app.InputWhile("Хост или IP Проекта: ")
             urlproject = app.InputWhile("Ccылка На Проект: ")
+            # Путь куда Загружать Проект и куда распаковывать
+            path_download = f"{dir_path}/{dir_projects_downloads}/{arhiveproject}.7z"
+            path_project = f"{dir_path}/{dir_projects}/{nameproject}"
+            # Загрузка
             result_down=app.DownloadFile(urlproject, path_download)
             if result_down==True:
-                command = f'7z x "{path_download}" -o{dir_path}/{dir_projects}'
+                # Распаковка
+                command = f'7z x "{path_download}" -o{path_project}'
                 os.system(command)
                 project={
                     "Name": nameproject, 
                     "NginxFile": f"/etc/nginx/sites-available/{nameproject}", 
-                    "Dir_Project": "serverdir", 
+                    "Dir_Project": path_project,
+                    "File_Project": filerunproject,
+                    "HostWeb": hostproject,
+                    "HostRun": hostrunproject,
+                    "IP" : ipproject,
+                    "Port": portproject,
                     "Core": "core6", 
                     "ServiceFile": f"/etc/systemd/system/{nameproject}.service"
                 }
@@ -104,16 +114,17 @@ def Main():
                 if resadd==True:
                     print(f"Проект {nameproject} Загружен!")
                     project_nginx = Project_Nginx(
-                        nameproject=nameproject,
+                        nameproject=project["Name"],
                         dir_path=dir_path,
-                        dir_projects=dir_projects,
+                        dir_project=project["Dir_Project"],
+                        file_project=project["File_Project"],
                         core=project["Core"],
                         nginx_file=project["NginxFile"],
                         service_file=project["ServiceFile"],
-                        ip=ipproject,
-                        host=hostproject,
-                        hostrun=hostrunproject,
-                        port=portproject
+                        ip=project["IP"],
+                        host=project["HostWeb"],
+                        hostrun=project["HostRun"],
+                        port=project["Port"]
                     )
                     proj_nginx.CreateSettingProject(project_nginx)
                 else:

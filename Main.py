@@ -1,13 +1,17 @@
 import subprocess, os, sys
-from Web_Share_Core import Web_Core, Web_Projects
+from Web_Share_Core import Web_Core, Web_Projects, Web_Nginx_Core
+from typing import Literal
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
-dir_projects = "projects"
-dir_projects_downloads = "projects_downloads"
+# Константы
+dir_projects: Literal["projects"] = "projects"
+dir_projects_downloads: Literal["projects_downloads"] = "projects_downloads"
+file_project: Literal["Projects.json"]="Projects.json"
 
 app=Web_Core()
-setting=Web_Projects()
+setting=Web_Projects(file_project)
+proj_nginx = Web_Nginx_Core()
 
 # interface = app.InputWhile("Интерфейс enp0s3: ")
 # ipmashen = app.InputWhile("IP Машыны: ")
@@ -59,13 +63,13 @@ setting=Web_Projects()
 # else:
 #     print(f"Err: {err}")
 
-dic={
-        "Name": "server2",
-        "NginxFile": "1",
-        "Dir_Project": "serverdir1",
-        "Core": "core6",
-        "ServiceFile": "server1.service"
-    }
+# dic={
+#         "Name": "server2",
+#         "NginxFile": "1",
+#         "Dir_Project": "serverdir1",
+#         "Core": "core6",
+#         "ServiceFile": "server1.service"
+#     }
 
 
 # res, err=setting.Add(dic)
@@ -80,3 +84,6 @@ dic={
 # else:
 #     print(err)
 #     print("Нету!")
+ip,host="192.168.134.200","vidoconferencia.hopto.org"
+#res=proj_nginx.LinexHost_Add(ip,host)
+res=proj_nginx.LinexHost_Del(ip,host)

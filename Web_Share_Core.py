@@ -99,9 +99,9 @@ class Web_Core(object):
             res_file[2]=f"ERROR: {ex}!"
         return res_file
     def ReadFile(self, pathfile: str, method: int, encod="utf-8")->list:
-        """Чтение Файла Полностью
-            method -> 1 - читает полностью файл
-            method -> 2 - читает построчно файл
+        """Чтение Файла Полностью\n
+            method -> 1 - читает полностью файл\n
+            method -> 2 - читает построчно файл\n
             method -> 3 - читает построчно исключая пустые строки файл
         """
         res_file=[False,None,""]
@@ -280,8 +280,10 @@ class Project_Nginx(object):
     """Имя Проекта"""
     Dir_Path: str=""
     """Папка Самой Программы"""
-    Dir_Projects: str=""
+    Dir_Project: str=""
     """Папка с Проектами"""
+    File_Project: str=""
+    """Файл Запуска Проекта"""
     Core: str="core6"
     """Ядро Проекта"""
     Nginx_File: str=""
@@ -296,10 +298,11 @@ class Project_Nginx(object):
     """Хост Запущен Проект"""
     Port: int=80
     """Порт"""
-    def __init__(self, nameproject: str, dir_path: str, dir_projects: str, core: str, nginx_file: str, service_file: str, ip: str, host: str, hostrun: str, port: int):
+    def __init__(self, nameproject: str, dir_path: str, dir_project: str, file_project: str, core: str, nginx_file: str, service_file: str, ip: str, host: str, hostrun: str, port: int):
         self.NameProject=nameproject
         self.Dir_Path=dir_path
-        self.Dir_Projects=dir_projects
+        self.Dir_Project=dir_project
+        self.File_Project=file_project
         self.Core=core
         self.Nginx_File=nginx_file
         self.Service_File=service_file
@@ -316,6 +319,7 @@ class Web_Nginx_Core(object):
         """Веб Проекты"""
         self.__App=Web_Core()
     def CreateSettingProject(self, project: Project_Nginx):
+        """Создание Настройки Сайта"""
         # Выбор Настройки
         if project.Core=="core6":
             # Прописываем Файл для Nginx
@@ -353,8 +357,8 @@ class Web_Nginx_Core(object):
                 '[Unit]',
                 f'Description=Проект {project.NameProject}',
                 '[Service]',
-                f'WorkingDirectory={project.Dir_Path}/{project.Dir_Projects}/Server_Testing2000',
-                f'ExecStart=/usr/bin/dotnet "{project.Dir_Path}/{project.Dir_Projects}/Server_Testing2000/BlazorApp_CompilationTest.dll"',
+                f'WorkingDirectory={project.Dir_Project}',
+                f'ExecStart=/usr/bin/dotnet "{project.Dir_Project}/{project.File_Project}"',
                 'Restart=always',
                 f'# Перезапустите службу через 10 секунд, если служба выйдет из строя.:',
                 'RestartSec=10',
@@ -374,15 +378,65 @@ class Web_Nginx_Core(object):
                 os.system(f"sudo systemctl restart {project.NameProject}.service")
                 os.system(f"sudo systemctl status {project.NameProject}.service")
                 print(f"Настройки Сервиса {project.NameProject} Сайта Созданы!")
-            # До настройки
-            self.NginxConf()
-    def NginxConf(self):
-        """Коректировать Раскоментить"""
+            # До Настройки 
+            self.NginxConf("server_names_hash_bucket_size 64","	server_names_hash_bucket_size 64;\n")
+            # self.LinexHost_Del(project.IP, project.Host) #Удаление для перезаписи
+            self.LinexHost_Add(project.IP, project.Host)
+            
+    def NginxConf(self,findstr : str, correctstr: str)->bool:
+        """Коректировать Раскоментить\n
+        findstr - Строка без пустот \n
+        correctstr - Замена на строку другую с пустотами полностью 
+        """
+        Flag=False
         pathfile="/etc/nginx/nginx.conf"
-        correct="server_names_hash_bucket_size 64"
-    def LinexHost_Add(self, ip: str, host: str):
+        res, lines, err=self.__App.ReadFile(pathfile, 2)
+        if res==True:
+            linesset=[]
+            for li in lines:
+                li=str(li)
+                lifind=str(li.strip())
+                if lifind.find(findstr)!= -1:
+                    linesset.append(correctstr)
+                else:
+                    linesset.append(li)
+            res2, contents2, err2=self.__App.WriteFile(pathfile, linesset)
+            Flag=res2
+        return Flag
+
+    def LinexHost_Add(self, ip: str, host: str)->bool:
         """Прописать Хост"""
+        Flag=False
         pathfile="/etc/hosts"
-    def LinexHost_Del(self, ip: str, host: str):
+        res, lines, err=self.__App.ReadFile(pathfile, 2)
+        if res==True:
+            linesset=[]
+            lines_without_empty = [line for line in lines if line.strip()==f"{ip} {host}"]
+            # Прибавление если нету
+            if len(lines_without_empty)==0:
+                lines=[f"{ip} {host}\n"]+lines
+            # Перезапись
+            for li in lines:
+                li=str(li)
+                linesset.append(li)
+            res2, contents2, err2=self.__App.WriteFile(pathfile, linesset)
+            Flag=res2
+        return Flag
+
+    def LinexHost_Del(self, ip: str, host: str)->bool:
         """Удалить Хост"""
+        Flag=False
         pathfile="/etc/hosts"
+        res, lines, err=self.__App.ReadFile(pathfile, 2)
+        if res==True:
+            linesset=[]
+            for li in lines:
+                li=str(li)
+                lifind=str(li.strip())
+                if lifind.find(f"{ip} {host}")!= -1:
+                    pass
+                else:
+                    linesset.append(li)
+            res2, contents2, err2=self.__App.WriteFile(pathfile, linesset)
+            Flag=res2
+        return Flag
