@@ -103,6 +103,8 @@ def Main():
                 os.system(command)
                 print(f"D1: {path_download}")
                 print(f"D2: {path_project}")
+                # Даем Полный Доступ папке с проектами
+                os.system(f'chmod -R 777 "{dir_path}/{dir_projects}/"')
                 project={
                     "Name": nameproject, 
                     "NginxFile": f"/etc/nginx/sites-available/{nameproject}", 
@@ -115,7 +117,6 @@ def Main():
                     "Core": "core6", 
                     "ServiceFile": f"/etc/systemd/system/{nameproject}.service"
                 }
-                app.PauseProcess()
                 resadd, err=proj_setting.Add(project)
                 if resadd==True:
                     print(f"Проект {nameproject} Загружен!")

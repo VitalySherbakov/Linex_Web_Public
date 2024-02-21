@@ -166,6 +166,9 @@ class Web_Core(object):
     def PauseProcess(self)->None:
         """Пауза 2"""
         input("-------------Начать-------------")
+    def PauseWrite(self, text: str):
+        """Пауза 3"""
+        input(f"-------------{text}-------------")
 
 
 class Web_Projects(object):
