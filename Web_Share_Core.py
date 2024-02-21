@@ -337,6 +337,7 @@ class Web_Nginx_Core(object):
             if os.path.exists(f"/etc/nginx/sites-enabled/{project.NameProject}")==True:
                 # Если есть удалить для Перезаписи
                 os.remove(f"/etc/nginx/sites-enabled/{project.NameProject}")
+            self.__App.PauseWrite("Тестинг1")
             # Создать Файл Nginx
             content_nginx=[
                 "server {\n",
@@ -354,15 +355,18 @@ class Web_Nginx_Core(object):
                 "       proxy_set_header X-Forwarded-Proto $scheme;\n",
                 "   }\n",
                 "}\n"
-                ]                    
+                ]
+            self.__App.PauseWrite("Тестинг2")                 
             res2,content2, err2=self.__App.WriteFile(f"/etc/nginx/sites-available/{project.Nginx_File}",content_nginx)
             if res2==True:
                 os.system(f'sudo ln -s /etc/nginx/sites-available/{project.Nginx_File} /etc/nginx/sites-enabled/')
                 print(f"Настройки {project.NameProject} Сайта Созданы!")
+            self.__App.PauseWrite("Тестинг3")
             # Создание Сервиса для Запуска Проекта
             if os.path.exists(f"/etc/systemd/system/{project.Service_File}")==True:
                 # Если есть удалить для Перезаписи
                 os.remove(f"/etc/systemd/system/{project.Service_File}")
+            self.__App.PauseWrite("Тестинг4")
             # Создать Файл Сервиса
             content_service=[
                 '[Unit]',
@@ -382,6 +386,7 @@ class Web_Nginx_Core(object):
                 '[Install]',
                 'WantedBy=multi-user.target'
                 ]
+            self.__App.PauseWrite("Тестинг5")
             res3,content3, err3=self.__App.WriteFile(f"/etc/systemd/system/{project.Service_File}",content_service)
             if res3==True:
                 os.system(f"sudo systemctl enable {project.NameProject}.service")
@@ -389,10 +394,13 @@ class Web_Nginx_Core(object):
                 os.system(f"sudo systemctl restart {project.NameProject}.service")
                 # os.system(f"sudo systemctl status {project.NameProject}.service")
                 print(f"Настройки Сервиса {project.NameProject} Сайта Созданы!")
+            self.__App.PauseWrite("Тестинг6")
             # До Настройки 
             self.NginxConf("server_names_hash_bucket_size 64","	server_names_hash_bucket_size 64;\n")
+            self.__App.PauseWrite("Тестинг7")
             # self.LinexHost_Del(project.IP, project.Host) #Удаление для перезаписи
             self.LinexHost_Add(project.IP, project.Host)
+            self.__App.PauseWrite("Тестинг8")
             
     def NginxConf(self,findstr : str, correctstr: str)->bool:
         """Коректировать Раскоментить\n
