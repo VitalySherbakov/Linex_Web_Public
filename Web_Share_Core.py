@@ -345,6 +345,7 @@ class Web_Nginx_Core(object):
             # Создание Сервиса для Запуска Проекта
             if os.path.exists(systemd_service_file)==True:
                 # Если есть удалить для Перезаписи
+                os.system(f"sudo systemctl stop {project.Service_File}")
                 os.remove(systemd_service_file)
             # Создать Файл Nginx
             content_nginx=[

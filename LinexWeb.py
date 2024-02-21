@@ -42,8 +42,8 @@ def Main():
         print(f"1) Список Проектов")
         print(f"2) Список Сервисов")
         print(f"3) Установить IP Адресс (Ubuntu, Debian)")
-        print(f"4) Скачать Проект")
-        print(f"5) Запуск Проекта Опубликовать")
+        print(f"4) Скачать Проект и Опубликовать")
+        print(f"5) Зарегестрировать Протокол HTTPS")
         print(f"6) Очистить Консоль")
         print(f"7) Выход из Скрипта")
         result = app.InputWhile("Номер Выбора: ")
@@ -141,7 +141,12 @@ def Main():
             else:
                 print("Ошыбка Загрузки!")
         if result=="5":
-            pass 
+            print("Регестрация HTTPS Сертификата")
+            hostweb = app.InputWhile("Хост Сайта: ")
+            os.system(f"sudo systemctl stop nginx")
+            os.system(f"sudo certbot --nginx -d {hostweb}")
+            os.system("sudo systemctl start nginx")
+            os.system("sudo systemctl restart nginx")
         if result=="6":
             os.system("clear")
         if result=="7":

@@ -75,6 +75,17 @@ function function_nginx(){
 #     cd ..
 # }
 
+function function_snapd(){
+    # Установка certbot для Авторегестрации HTTPS
+    sudo apt install snapd -y
+    sudo snap install core; sudo snap refresh core
+    sudo snap install --classic certbot
+    sudo ln -s /snap/bin/certbot /usr/bin/certbot
+    sudo systemctl stop nginx
+    sudo systemctl start nginx
+    sudo systemctl restart nginx
+}
+
 function function_pack2(){
     # Установка Пакетов
     echo "Обновление..."
@@ -94,6 +105,7 @@ function function_pack2(){
     function_python
     function_core6
     function_nginx
+    function_snapd
     #function_projects
     echo "-----Конец Установки Пакетов-----"
 	echo "Авто Выход с Скрипта"
