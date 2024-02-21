@@ -92,6 +92,9 @@ def Main():
             # Путь куда Загружать Проект и куда распаковывать
             path_download = f"{dir_path}/{dir_projects_downloads}/{arhiveproject}.7z"
             path_project = f"{dir_path}/{dir_projects}/{nameproject}"
+            # Удаление придыдущего проекта
+            if os.path.exists(path_project)==True:
+                os.remove(path_project)
             # Загрузка
             result_down=app.DownloadFile(urlproject, path_download)
             if result_down==True:

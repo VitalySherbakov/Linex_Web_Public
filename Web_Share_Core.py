@@ -328,21 +328,21 @@ class Web_Nginx_Core(object):
                 os.remove(project.Nginx_File)
             # Создать Файл Nginx
             content_nginx=[
-                "server {",
-                f"   listen {project.Port};",
-                f"   server_name {project.Host};",
-                "",
-                "   location / {",
-                f"      proxy_pass {project.HostRun};",
-                "       proxy_http_version 1.1;",
-                "       proxy_set_header Upgrade $http_upgrade;",
-                "       proxy_set_header Connection keep-alive;",
-                "       proxy_set_header Host $host;",
-                "       proxy_cache_bypass $http_upgrade;",
-                "       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;",
-                "       proxy_set_header X-Forwarded-Proto $scheme;",
-                "   }",
-                "}"
+                "server {\n",
+                f"   listen {project.Port};\n",
+                f"   server_name {project.Host};\n",
+                "\n",
+                "   location / {\n",
+                f"      proxy_pass {project.HostRun};\n",
+                "       proxy_http_version 1.1;\n",
+                "       proxy_set_header Upgrade $http_upgrade;\n",
+                "       proxy_set_header Connection keep-alive;\n",
+                "       proxy_set_header Host $host;\n",
+                "       proxy_cache_bypass $http_upgrade;\n",
+                "       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n",
+                "       proxy_set_header X-Forwarded-Proto $scheme;\n",
+                "   }\n",
+                "}\n"
                 ]                    
             res2,content2, err2=self.__App.WriteFile(project.Nginx_File,content_nginx)
             if res2==True:
@@ -376,7 +376,7 @@ class Web_Nginx_Core(object):
                 os.system(f"sudo systemctl enable {project.NameProject}.service")
                 os.system(f"sudo systemctl start {project.NameProject}.service")
                 os.system(f"sudo systemctl restart {project.NameProject}.service")
-                os.system(f"sudo systemctl status {project.NameProject}.service")
+                # os.system(f"sudo systemctl status {project.NameProject}.service")
                 print(f"Настройки Сервиса {project.NameProject} Сайта Созданы!")
             # До Настройки 
             self.NginxConf("server_names_hash_bucket_size 64","	server_names_hash_bucket_size 64;\n")
