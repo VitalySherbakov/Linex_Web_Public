@@ -108,7 +108,7 @@ def Main():
                     os.remove(path_download)
                 project={
                     "Name": nameproject, 
-                    "NginxFile": f"/etc/nginx/sites-available/{nameproject}", 
+                    "NginxFile": f"{nameproject}", 
                     "Dir_Project": path_project,
                     "File_Project": filerunproject,
                     "HostWeb": hostproject,
@@ -116,7 +116,7 @@ def Main():
                     "IP" : ipproject,
                     "Port": portproject,
                     "Core": "core6", 
-                    "ServiceFile": f"/etc/systemd/system/{nameproject}.service"
+                    "ServiceFile": f"{nameproject}.service"
                 }
                 resadd, err=proj_setting.Add(project)
                 if resadd==True:

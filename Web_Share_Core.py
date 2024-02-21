@@ -326,9 +326,13 @@ class Web_Nginx_Core(object):
         # Выбор Настройки
         if project.Core=="core6":
             # Прописываем Файл для Nginx
-            if os.path.exists(project.Nginx_File)==True:
+            if os.path.exists(f"/etc/nginx/sites-available/{project.Nginx_File}")==True:
                 # Если есть удалить для Перезаписи
-                os.remove(project.Nginx_File)
+                os.remove(f"/etc/nginx/sites-available/{project.Nginx_File}")
+            # Удаляем Nginx Файл
+            if os.path.exists(f"/etc/nginx/sites-enabled/{project.NameProject}")==True:
+                # Если есть удалить для Перезаписи
+                os.remove(f"/etc/nginx/sites-enabled/{project.NameProject}")
             # Создать Файл Nginx
             content_nginx=[
                 "server {\n",
@@ -347,14 +351,14 @@ class Web_Nginx_Core(object):
                 "   }\n",
                 "}\n"
                 ]                    
-            res2,content2, err2=self.__App.WriteFile(project.Nginx_File,content_nginx)
+            res2,content2, err2=self.__App.WriteFile(f"/etc/nginx/sites-available/{project.Nginx_File}",content_nginx)
             if res2==True:
-                os.system(f'sudo ln -s {project.Nginx_File} /etc/nginx/sites-enabled/')
+                os.system(f'sudo ln -s /etc/nginx/sites-available/{project.Nginx_File} /etc/nginx/sites-enabled/')
                 print(f"Настройки {project.NameProject} Сайта Созданы!")
             # Создание Сервиса для Запуска Проекта
-            if os.path.exists(project.Service_File)==True:
+            if os.path.exists(f"/etc/systemd/system/{project.Service_File}")==True:
                 # Если есть удалить для Перезаписи
-                os.remove(project.Service_File)
+                os.remove(f"/etc/systemd/system/{project.Service_File}")
             # Создать Файл Сервиса
             content_service=[
                 '[Unit]',
@@ -374,7 +378,7 @@ class Web_Nginx_Core(object):
                 '[Install]',
                 'WantedBy=multi-user.target'
                 ]
-            res3,content3, err3=self.__App.WriteFile(project.Service_File,content_service)
+            res3,content3, err3=self.__App.WriteFile(f"/etc/systemd/system/{project.Service_File}",content_service)
             if res3==True:
                 os.system(f"sudo systemctl enable {project.NameProject}.service")
                 os.system(f"sudo systemctl start {project.NameProject}.service")
