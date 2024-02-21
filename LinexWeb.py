@@ -101,10 +101,11 @@ def Main():
                 # Распаковка
                 command = f'7z x "{path_download}" -o{path_project}'
                 os.system(command)
-                print(f"D1: {path_download}")
-                print(f"D2: {path_project}")
                 # Даем Полный Доступ папке с проектами
                 os.system(f'chmod -R 777 "{dir_path}/{dir_projects}/"')
+                # Удаляем Скаченый Архив
+                if os.path.exists(path_download):
+                    os.remove(path_download)
                 project={
                     "Name": nameproject, 
                     "NginxFile": f"/etc/nginx/sites-available/{nameproject}", 
