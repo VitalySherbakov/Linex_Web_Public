@@ -98,6 +98,9 @@ def Main():
                 # Распаковка
                 command = f'7z x "{path_download}" -o{path_project}'
                 os.system(command)
+                print(f"D1: {path_download}")
+                print(f"D2: {path_project}")
+                app.PauseProcess()
                 project={
                     "Name": nameproject, 
                     "NginxFile": f"/etc/nginx/sites-available/{nameproject}", 
