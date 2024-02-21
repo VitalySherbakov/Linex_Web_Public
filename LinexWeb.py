@@ -41,17 +41,74 @@ def Main():
         print(f"---------------------------------------------------")
         print(f"1) Список Проектов")
         print(f"2) Список Сервисов")
-        print(f"3) Установить IP Адресс (Ubuntu, Debian)")
-        print(f"4) Скачать Проект и Опубликовать")
-        print(f"5) Зарегестрировать Протокол HTTPS")
-        print(f"6) Очистить Консоль")
-        print(f"7) Выход из Скрипта")
+        print(f"3) Удалить Проекты")
+        print(f"4) Установить IP Адресс (Ubuntu, Debian)")
+        print(f"5) Скачать Проект и Опубликовать")
+        print(f"6) Зарегестрировать Протокол HTTPS")
+        print(f"7) Очистить Консоль")
+        print(f"8) Выход из Скрипта")
         result = app.InputWhile("Номер Выбора: ")
         if result=="1":
-            pass
+            res, data, err=app.ReadJson(f"{dir_path}/{file_project}")
+            if res==True:
+                print("--------------Проекты--------------")
+                for i,li in enumerate(data):
+                    i=i+1
+                    print(f'{i}) Проект: {li["Name"]}')
+                    print(f'{i}) Папка: {li["Dir_Project"]}')
+                    print(f'{i}) Запуск: {li["File_Project"]}')
+                print("-----------------------------------")
+            else:
+                print(err)
         if result=="2":
-            pass
+            res, data, err=app.ReadJson(f"{dir_path}/{file_project}")
+            if res==True:
+                print("--------------Сервисы--------------")
+                for i,li in enumerate(data):
+                    i=i+1
+                    print(f'{i}) Сервис: {li["ServiceFile"]}')
+                print("-----------------------------------")
+            else:
+                print(err)
         if result=="3":
+            res, data, err=app.ReadJson(f"{dir_path}/{file_project}")
+            if res==True:
+                print("--------------Проекты--------------")
+                for i,li in enumerate(data):
+                    i=i+1
+                    print(f'{i}) Проект: {li["Name"]}')
+                    print(f'{i}) Папка: {li["Dir_Project"]}')
+                    print(f'{i}) Запуск: {li["File_Project"]}')
+                print("-----------------------------------")
+                nameproject = app.InputWhile("Имя Проекта: ")
+                resdel = app.InputWhile("Вы Уверены Удалении Y/N: ")
+                if resdel.lower()=="y":
+                    # ------------Адреса----------------------
+                    sites_available_file = f'/etc/nginx/sites-available/{li["NginxFile"]}'
+                    sites_enabled_file= f'/etc/nginx/sites-enabled/{li["NginxFile"]}'
+                    systemd_service_file = f'/etc/systemd/system/{li["ServiceFile"]}'
+                    # -----------Удаление Перезаписи------------
+                    if os.path.exists(sites_available_file)==True:
+                        # Если есть удалить для Перезаписи
+                        os.remove(sites_available_file)
+                    # Удаляем Nginx Файл
+                    if os.path.exists(sites_enabled_file)==True:
+                        # Если есть удалить для Перезаписи
+                        os.remove(sites_enabled_file)
+                    # Создание Сервиса для Запуска Проекта
+                    if os.path.exists(systemd_service_file)==True:
+                        # Если есть удалить для Перезаписи
+                        os.system(f'sudo systemctl stop {li["ServiceFile"]}')
+                        os.remove(systemd_service_file)
+                    # Чистка Хоста
+                    proj_nginx.LinexHost_Del(li["IP"],li["HostWeb"])
+                    # Удаление Проекта
+                    if os.path.exists(li["Dir_Project"]):
+                        os.remove(li["Dir_Project"])
+                        print(f'Проект {li["Name"]} Удален!')
+            else:
+                print(err)
+        if result=="4":
             interface = app.InputWhile("Интерфейс enp0s3: ")
             ipmashen = app.InputWhile("IP Машыны: ")
             iprouter = app.InputWhile("IP Роутер: ")
@@ -80,7 +137,7 @@ def Main():
             os.system("systemctl restart NetworkManager")
             os.system("systemctl restart networking.service")
             print("Сеть Перезагружена!")
-        if result=="4":
+        if result=="5":
             nameproject = app.InputWhile("Имя Проекта: ")
             arhiveproject = app.InputWhile("Имя Файл Архива: ")
             filerunproject = app.InputWhile("Запускаймый Файл: ")
@@ -140,18 +197,27 @@ def Main():
                     print(f"Ошыбка Проекта: {err}")
             else:
                 print("Ошыбка Загрузки!")
-        if result=="5":
+        if result=="6":
             print("Регестрация HTTPS Сертификата")
+            res, data, err=app.ReadJson(f"{dir_path}/{file_project}")
+            if res==True:
+                print("--------------Проекты--------------")
+                for i,li in enumerate(data):
+                    i=i+1
+                    print(f'{i}) Проект: {li["Name"]}|{li["HostWeb"]}')
+                print("-----------------------------------")
+            else:
+                print(err)
             hostweb = app.InputWhile("Хост Сайта: ")
             os.system(f"sudo systemctl stop nginx")
             os.system(f"sudo certbot --nginx -d {hostweb}")
             os.system("sudo systemctl start nginx")
             os.system("sudo systemctl restart nginx")
-        if result=="6":
-            os.system("clear")
         if result=="7":
+            os.system("clear")
+        if result=="8":
             break
-        elif result!="1" and result!="2" and result!="3" and result!="4" and result!="5" and result!="6" and result!="7":
+        elif result!="1" and result!="2" and result!="3" and result!="4" and result!="5" and result!="6" and result!="7" and result!="8":
             print(f"Не Верная {result} Команда!")
         app.Pause()
 
