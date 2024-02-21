@@ -371,7 +371,7 @@ class Web_Nginx_Core(object):
                 '[Install]',
                 'WantedBy=multi-user.target'
                 ]
-            res3,content3, err3=self.__App.WriteFile(project["ServiceFile"],content_service)
+            res3,content3, err3=self.__App.WriteFile(project.Service_File,content_service)
             if res3==True:
                 os.system(f"sudo systemctl enable {project.NameProject}.service")
                 os.system(f"sudo systemctl start {project.NameProject}.service")
