@@ -107,6 +107,10 @@ def Main():
                     if os.path.exists(dir_peoject_del):
                         #os.remove(dir_peoject_del)
                         os.system(f'rm -rf "{dir_peoject_del}"')
+                        # Удаляем Записи в проектах
+                        res2, err=proj_setting.DelName(li["Name"])
+                        if res2==True:
+                            print(f'Запись {li["Name"]} Удалена!')
                         print(f'Проект {li["Name"]} Удален!')
             else:
                 print(err)
