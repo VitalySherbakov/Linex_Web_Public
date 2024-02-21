@@ -10,7 +10,7 @@ dir_projects_downloads: Literal["projects_downloads"] = "projects_downloads"
 file_project: Literal["Projects.json"]="Projects.json"
 # Зависимости
 app = Web_Core()
-proj_setting = Web_Projects(file_project)
+proj_setting = Web_Projects(f"{dir_path}/{file_project}")
 proj_nginx = Web_Nginx_Core()
 
 platform_name=sys.argv[1] #Получить Платформу для доступа
@@ -100,7 +100,6 @@ def Main():
                 os.system(command)
                 print(f"D1: {path_download}")
                 print(f"D2: {path_project}")
-                app.PauseProcess()
                 project={
                     "Name": nameproject, 
                     "NginxFile": f"/etc/nginx/sites-available/{nameproject}", 
@@ -113,6 +112,7 @@ def Main():
                     "Core": "core6", 
                     "ServiceFile": f"/etc/systemd/system/{nameproject}.service"
                 }
+                app.PauseProcess()
                 resadd, err=proj_setting.Add(project)
                 if resadd==True:
                     print(f"Проект {nameproject} Загружен!")
