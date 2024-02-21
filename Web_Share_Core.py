@@ -326,17 +326,18 @@ class Web_Nginx_Core(object):
         # Выбор Настройки
         if project.Core=="core6":
             # Прописываем Файл для Nginx
-            # Доступы
+            # -------------Доступы----------------------
             os.system(f'chmod -R 777 "/etc/nginx/sites-available/"')
             os.system(f'chmod -R 777 "/etc/nginx/sites-enabled/"')
             os.system(f'chmod -R 777 "/etc/systemd/system/"')
-            # Адреса
+            # ------------Адреса----------------------
             sites_available_file = f"/etc/nginx/sites-available/{project.Nginx_File}"
             sites_enabled_file= f"/etc/nginx/sites-enabled/{project.Nginx_File}"
             systemd_service_file = f"/etc/systemd/system/{project.Service_File}"
             print(f"D1: {sites_available_file}")
             print(f"D2: {sites_enabled_file}")
             print(f"D3: {systemd_service_file}")
+            # -----------Удаление Перезаписи------------
             if os.path.exists(sites_available_file)==True:
                 # Если есть удалить для Перезаписи
                 os.remove(sites_available_file)
@@ -344,6 +345,10 @@ class Web_Nginx_Core(object):
             if os.path.exists(sites_enabled_file)==True:
                 # Если есть удалить для Перезаписи
                 os.remove(sites_enabled_file)
+            # Создание Сервиса для Запуска Проекта
+            if os.path.exists(systemd_service_file)==True:
+                # Если есть удалить для Перезаписи
+                os.remove(systemd_service_file)
             self.__App.PauseWrite("Тестинг1")
             # Создать Файл Nginx
             content_nginx=[
@@ -369,10 +374,6 @@ class Web_Nginx_Core(object):
                 os.system(f'sudo ln -s {sites_available_file} /etc/nginx/sites-enabled/')
                 print(f"Настройки {project.NameProject} Сайта Созданы!")
             self.__App.PauseWrite("Тестинг3")
-            # Создание Сервиса для Запуска Проекта
-            if os.path.exists(systemd_service_file)==True:
-                # Если есть удалить для Перезаписи
-                os.remove(systemd_service_file)
             self.__App.PauseWrite("Тестинг4")
             # Создать Файл Сервиса
             content_service=[
