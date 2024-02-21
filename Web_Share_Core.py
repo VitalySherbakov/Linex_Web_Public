@@ -332,7 +332,7 @@ class Web_Nginx_Core(object):
             os.system(f'chmod -R 777 "/etc/systemd/system/"')
             # Адреса
             sites_available_file = f"/etc/nginx/sites-available/{project.Nginx_File}"
-            sites_enabled_file= f"/etc/nginx/sites-available/{project.Nginx_File}"
+            sites_enabled_file= f"/etc/nginx/sites-enabled/{project.Nginx_File}"
             systemd_service_file = f"/etc/systemd/system/{project.Service_File}"
             print(f"D1: {sites_available_file}")
             print(f"D2: {sites_enabled_file}")
