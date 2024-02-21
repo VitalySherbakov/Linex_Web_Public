@@ -329,6 +329,7 @@ class Web_Nginx_Core(object):
             # Доступы
             os.system(f'chmod -R 777 "/etc/nginx/sites-available/"')
             os.system(f'chmod -R 777 "/etc/nginx/sites-enabled/"')
+            os.system(f'chmod -R 777 "/etc/systemd/system/"')
             if os.path.exists(f"/etc/nginx/sites-available/{project.Nginx_File}")==True:
                 # Если есть удалить для Перезаписи
                 os.remove(f"/etc/nginx/sites-available/{project.Nginx_File}")
