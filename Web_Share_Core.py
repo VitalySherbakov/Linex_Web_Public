@@ -377,22 +377,22 @@ class Web_Nginx_Core(object):
             self.__App.PauseWrite("Тестинг4")
             # Создать Файл Сервиса
             content_service=[
-                '[Unit]',
-                f'Description=Проект {project.NameProject}',
-                '[Service]',
-                f'WorkingDirectory={project.Dir_Project}',
-                f'ExecStart=/usr/bin/dotnet "{project.Dir_Project}/{project.File_Project}"',
-                'Restart=always',
-                f'# Перезапустите службу через 10 секунд, если служба выйдет из строя.:',
-                'RestartSec=10',
-                'KillSignal=SIGINT',
-                f'SyslogIdentifier={project.NameProject}',
-                'User=www-data',
-                'Environment=ASPNETCORE_ENVIRONMENT=Production',
-                'Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false',
-                '',
-                '[Install]',
-                'WantedBy=multi-user.target'
+                '[Unit]\n',
+                f'Description=Проект {project.NameProject}\n',
+                '[Service]\n',
+                f'WorkingDirectory={project.Dir_Project}\n',
+                f'ExecStart=/usr/bin/dotnet "{project.Dir_Project}/{project.File_Project}"\n',
+                'Restart=always\n',
+                f'# Перезапустите службу через 10 секунд, если служба выйдет из строя.:\n',
+                'RestartSec=10\n',
+                'KillSignal=SIGINT\n',
+                f'SyslogIdentifier={project.NameProject}\n',
+                'User=www-data\n',
+                'Environment=ASPNETCORE_ENVIRONMENT=Production\n',
+                'Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false\n',
+                '\n',
+                '[Install]\n',
+                'WantedBy=multi-user.target\n'
                 ]
             self.__App.PauseWrite("Тестинг5")
             res3,content3, err3=self.__App.WriteFile(systemd_service_file,content_service)
