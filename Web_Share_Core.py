@@ -326,6 +326,9 @@ class Web_Nginx_Core(object):
         # Выбор Настройки
         if project.Core=="core6":
             # Прописываем Файл для Nginx
+            # Доступы
+            os.system(f'chmod -R 777 "/etc/nginx/sites-available/"')
+            os.system(f'chmod -R 777 "/etc/nginx/sites-enabled/"')
             if os.path.exists(f"/etc/nginx/sites-available/{project.Nginx_File}")==True:
                 # Если есть удалить для Перезаписи
                 os.remove(f"/etc/nginx/sites-available/{project.Nginx_File}")
