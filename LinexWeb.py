@@ -103,8 +103,10 @@ def Main():
                     # Чистка Хоста
                     proj_nginx.LinexHost_Del(li["IP"],li["HostWeb"])
                     # Удаление Проекта
-                    if os.path.exists(li["Dir_Project"]):
-                        os.remove(li["Dir_Project"])
+                    dir_peoject_del = li["Dir_Project"]
+                    if os.path.exists(dir_peoject_del):
+                        #os.remove(dir_peoject_del)
+                        os.system(f'rm -rf "{dir_peoject_del}"')
                         print(f'Проект {li["Name"]} Удален!')
             else:
                 print(err)
