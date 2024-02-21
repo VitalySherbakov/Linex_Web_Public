@@ -330,13 +330,20 @@ class Web_Nginx_Core(object):
             os.system(f'chmod -R 777 "/etc/nginx/sites-available/"')
             os.system(f'chmod -R 777 "/etc/nginx/sites-enabled/"')
             os.system(f'chmod -R 777 "/etc/systemd/system/"')
-            if os.path.exists(f"/etc/nginx/sites-available/{project.Nginx_File}")==True:
+            # Адреса
+            sites_available_file = f"/etc/nginx/sites-available/{project.Nginx_File}"
+            sites_enabled_file= f"/etc/nginx/sites-available/{project.Nginx_File}"
+            systemd_service_file = f"/etc/systemd/system/{project.Service_File}"
+            print(f"D1: {sites_available_file}")
+            print(f"D2: {sites_enabled_file}")
+            print(f"D3: {systemd_service_file}")
+            if os.path.exists(sites_available_file)==True:
                 # Если есть удалить для Перезаписи
-                os.remove(f"/etc/nginx/sites-available/{project.Nginx_File}")
+                os.remove(sites_available_file)
             # Удаляем Nginx Файл
-            if os.path.exists(f"/etc/nginx/sites-enabled/{project.Nginx_File}")==True:
+            if os.path.exists(sites_enabled_file)==True:
                 # Если есть удалить для Перезаписи
-                os.remove(f"/etc/nginx/sites-enabled/{project.Nginx_File}")
+                os.remove(sites_enabled_file)
             self.__App.PauseWrite("Тестинг1")
             # Создать Файл Nginx
             content_nginx=[
@@ -357,15 +364,15 @@ class Web_Nginx_Core(object):
                 "}\n"
                 ]
             self.__App.PauseWrite("Тестинг2")                 
-            res2,content2, err2=self.__App.WriteFile(f"/etc/nginx/sites-available/{project.Nginx_File}",content_nginx)
+            res2,content2, err2=self.__App.WriteFile(sites_available_file,content_nginx)
             if res2==True:
-                os.system(f'sudo ln -s /etc/nginx/sites-available/{project.Nginx_File} /etc/nginx/sites-enabled/')
+                os.system(f'sudo ln -s {sites_available_file} /etc/nginx/sites-enabled/')
                 print(f"Настройки {project.NameProject} Сайта Созданы!")
             self.__App.PauseWrite("Тестинг3")
             # Создание Сервиса для Запуска Проекта
-            if os.path.exists(f"/etc/systemd/system/{project.Service_File}")==True:
+            if os.path.exists(systemd_service_file)==True:
                 # Если есть удалить для Перезаписи
-                os.remove(f"/etc/systemd/system/{project.Service_File}")
+                os.remove(systemd_service_file)
             self.__App.PauseWrite("Тестинг4")
             # Создать Файл Сервиса
             content_service=[
@@ -387,7 +394,7 @@ class Web_Nginx_Core(object):
                 'WantedBy=multi-user.target'
                 ]
             self.__App.PauseWrite("Тестинг5")
-            res3,content3, err3=self.__App.WriteFile(f"/etc/systemd/system/{project.Service_File}",content_service)
+            res3,content3, err3=self.__App.WriteFile(systemd_service_file,content_service)
             if res3==True:
                 os.system(f"sudo systemctl enable {project.NameProject}.service")
                 os.system(f"sudo systemctl start {project.NameProject}.service")
