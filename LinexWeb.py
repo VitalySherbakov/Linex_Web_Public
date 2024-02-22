@@ -44,9 +44,10 @@ def Main():
         print(f"3) Удалить Проекты")
         print(f"4) Установить IP Адресс (Ubuntu, Debian)")
         print(f"5) Скачать Проект и Опубликовать")
-        print(f"6) Зарегестрировать Протокол HTTPS")
-        print(f"7) Очистить Консоль")
-        print(f"8) Выход из Скрипта")
+        print(f"6) Тор Публикация")
+        print(f"7) Зарегестрировать Протокол HTTPS")
+        print(f"8) Очистить Консоль")
+        print(f"9) Выход из Скрипта")
         result = app.InputWhile("Номер Выбора: ")
         if result=="1":
             res, data, err=app.ReadJson(f"{dir_path}/{file_project}")
@@ -204,6 +205,17 @@ def Main():
             else:
                 print("Ошыбка Загрузки!")
         if result=="6":
+            # Автонастройка Тор
+            proj_nginx.LinexTor_Conf("HiddenServiceDir /var/lib/tor/hidden_service/","HiddenServiceDir /var/lib/tor/hidden_service/\n")
+            proj_nginx.LinexTor_Conf("HiddenServicePort 80 127.0.0.1:80","HiddenServicePort 80 127.0.0.1:80\n")
+            os.system("sudo systemctl start tor")
+            os.system("sudo systemctl enable tor")
+            os.system("sudo systemctl restart tor")
+            os.system("chmod -R 777 /var/lib/tor")
+            os.system("chmod -R 777 /var/lib/tor/hidden_service/")
+            urltor = app.ReadFile("/var/lib/tor/hidden_service/hostname",1)
+            print(f"URL TOR: {urltor}")
+        if result=="7":
             print("Регестрация HTTPS Сертификата")
             res, data, err=app.ReadJson(f"{dir_path}/{file_project}")
             if res==True:
@@ -219,11 +231,11 @@ def Main():
             os.system(f"sudo certbot --nginx -d {hostweb}")
             os.system("sudo systemctl start nginx")
             os.system("sudo systemctl restart nginx")
-        if result=="7":
-            os.system("clear")
         if result=="8":
+            os.system("clear")
+        if result=="9":
             break
-        elif result!="1" and result!="2" and result!="3" and result!="4" and result!="5" and result!="6" and result!="7" and result!="8":
+        elif result!="1" and result!="2" and result!="3" and result!="4" and result!="5" and result!="6" and result!="7" and result!="8" and result!="9":
             print(f"Не Верная {result} Команда!")
         app.Pause()
 

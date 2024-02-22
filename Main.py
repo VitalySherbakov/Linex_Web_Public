@@ -84,6 +84,9 @@ proj_nginx = Web_Nginx_Core()
 # else:
 #     print(err)
 #     print("Нету!")
-ip,host="192.168.134.200","vidoconferencia.hopto.org"
-#res=proj_nginx.LinexHost_Add(ip,host)
-res=proj_nginx.LinexHost_Del(ip,host)
+# ip,host="192.168.134.200","vidoconferencia.hopto.org"
+# #res=proj_nginx.LinexHost_Add(ip,host)
+# res=proj_nginx.LinexHost_Del(ip,host)
+
+res = proj_nginx.LinexTor_Conf("HiddenServiceDir /var/lib/tor/hidden_service/","HiddenServiceDir /var/lib/tor/hidden_service/\n")
+res = proj_nginx.LinexTor_Conf("HiddenServicePort 80 127.0.0.1:80","HiddenServicePort 80 127.0.0.1:80\n")

@@ -63,6 +63,7 @@ function function_nginx(){
     sudo ufw allow 443
     sudo ufw enable
     sudo ufw status
+    chmod -R 777 /var/www/html
 }
 
 # function function_projects(){

@@ -462,3 +462,26 @@ class Web_Nginx_Core(object):
             res2, contents2, err2=self.__App.WriteFile(pathfile, linesset)
             Flag=res2
         return Flag
+    
+    def LinexTor_Conf(self, findstr: str, correctstr: str)->bool:
+        """Корекция Тор Конфигуратора\n
+           findstr - Строка без пустот\n
+           correctstr - Замена на строку другую с пустотами полностью 
+        """
+        Flag=False
+        pathfile="/etc/tor/torrc"
+        oneflag=False # Повторить один раз
+        res, lines, err=self.__App.ReadFile(pathfile, 2)
+        if res==True:
+            linesset=[]
+            for li in lines:
+                li=str(li)
+                lifind=str(li.strip())
+                if lifind.find(findstr)!= -1 and oneflag==False:
+                    linesset.append(correctstr)
+                    oneflag=True
+                else:
+                    linesset.append(li)
+            res2, contents2, err2=self.__App.WriteFile(pathfile, linesset)
+            Flag=res2
+        return Flag
