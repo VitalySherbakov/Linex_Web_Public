@@ -213,11 +213,11 @@ def Main():
             os.system("sudo systemctl restart tor")
             os.system("chmod -R 777 /var/lib/tor")
             os.system("chmod -R 777 /var/lib/tor/hidden_service/")
-            res ,urltor, err = app.ReadFile("/var/lib/tor/hidden_service/hostname",1)
+            res ,urltor, error = app.ReadFile("/var/lib/tor/hidden_service/hostname",1)
             if res==True:
                 print(f"URL TOR: {urltor}")
             else:
-                pass(err)
+                print(error)
         if result=="7":
             print("Регестрация HTTPS Сертификата")
             res, data, err=app.ReadJson(f"{dir_path}/{file_project}")
