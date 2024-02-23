@@ -423,6 +423,99 @@ class Web_Nginx_Core(object):
             print("Хост: /etc/hosts")
             print(f"Добавлен: {project.IP}|{project.Hosts}")
             print(f"Проект {project.NameProject} Запущен!")
+    def CreateSettingProjectOne(self, project: Project_Nginx):
+        """Веб Настройка Использование Ядра Запуска Nginx Один только IP Машины"""
+        # Выбор Настройки
+        if project.Core=="core6":
+            # Прописываем Файл для Nginx
+            # -------------Доступы----------------------
+            os.system(f'chmod -R 777 "/etc/nginx/sites-available/"')
+            os.system(f'chmod -R 777 "/etc/nginx/sites-enabled/"')
+            os.system(f'chmod -R 777 "/etc/systemd/system/"')
+            # ------------Адреса----------------------
+            sites_available_file = f"/etc/nginx/sites-available/{project.Nginx_File}"
+            sites_enabled_file= f"/etc/nginx/sites-enabled/{project.Nginx_File}"
+            systemd_service_file = f"/etc/systemd/system/{project.Service_File}"
+            # -----------Удаление Перезаписи------------
+            if os.path.exists(sites_available_file)==True:
+                # Если есть удалить для Перезаписи
+                os.remove(sites_available_file)
+            # Удаляем Nginx Файл
+            if os.path.exists(sites_enabled_file)==True:
+                # Если есть удалить для Перезаписи
+                os.remove(sites_enabled_file)
+            # Создание Сервиса для Запуска Проекта
+            if os.path.exists(systemd_service_file)==True:
+                # Если есть удалить для Перезаписи
+                os.system(f"sudo systemctl stop {project.Service_File}")
+                os.remove(systemd_service_file)
+            # Резервирование Настроек Nginx default
+            dir_reserv="/etc/nginx/backfiles"
+            resdef=self.Ngnix_BackRestore("/etc/nginx/sites-available/default",f"{dir_reserv}/default")
+            if resdef==True:
+                print("Файл default Зарезервирован!")
+            else:
+                print("Файл default Не требует Зарезервирования!")
+            # Создать Файл Nginx
+            content_nginx=[
+                "server {\n",
+                f'   listen {self.__App.SetSplitText(project.Ports," ")};\n',
+                f'   server_name {self.__App.SetSplitText(project.Hosts," ")};\n',
+                "\n",
+                "   location / {\n",
+                f"      proxy_pass {project.HostRun};\n",
+                "       proxy_http_version 1.1;\n",
+                "       proxy_set_header Upgrade $http_upgrade;\n",
+                "       proxy_set_header Connection keep-alive;\n",
+                "       proxy_set_header Host $host;\n",
+                "       proxy_cache_bypass $http_upgrade;\n",
+                "       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n",
+                "       proxy_set_header X-Forwarded-Proto $scheme;\n",
+                "   }\n",
+                "}\n"
+                ]                 
+            res2,content2, err2=self.__App.WriteFile(f"/etc/nginx/sites-available/default",content_nginx)
+            if res2==True:
+                os.system(f'sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/')
+                print(f"Настройки {project.NameProject} Сайта Созданы!")
+            # Создать Файл Сервиса
+            content_service=[
+                '[Unit]\n',
+                f'Description=Проект {project.NameProject}\n',
+                '[Service]\n',
+                f'WorkingDirectory={project.Dir_Project}\n',
+                f'ExecStart=/usr/bin/dotnet "{project.Dir_Project}/{project.File_Project}"\n',
+                'Restart=always\n',
+                f'# Перезапустите службу через 10 секунд, если служба выйдет из строя.:\n',
+                'RestartSec=10\n',
+                'KillSignal=SIGINT\n',
+                f'SyslogIdentifier={project.NameProject}\n',
+                'User=www-data\n',
+                'Environment=ASPNETCORE_ENVIRONMENT=Production\n',
+                'Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false\n',
+                '\n',
+                '[Install]\n',
+                'WantedBy=multi-user.target\n'
+                ]
+            res3,content3, err3=self.__App.WriteFile(systemd_service_file,content_service)
+            if res3==True:
+                os.system(f"sudo systemctl enable {project.NameProject}.service")
+                os.system(f"sudo systemctl start {project.NameProject}.service")
+                os.system(f"sudo systemctl restart {project.NameProject}.service")
+                # os.system(f"sudo systemctl status {project.NameProject}.service")
+                print(f"Настройки Сервиса {project.NameProject} Сайта Созданы!")
+            # До Настройки 
+            self.NginxConf("server_names_hash_bucket_size 64","	server_names_hash_bucket_size 64;\n")
+            print("Nginx: /etc/nginx/nginx.conf")
+            print("Nginx Раскоментен-> server_names_hash_bucket_size 64")
+            # self.LinexHost_Del(project.IP, project.Host) #Удаление для перезаписи
+            for hos in project.Hosts:
+                self.LinexHost_Add(project.IP, hos)
+            # Перезагружаем Nginx принял все настройки
+            os.system("sudo systemctl restart nginx")
+            print("Хост: /etc/hosts")
+            print(f"Добавлен: {project.IP}|{project.Hosts}")
+            print(f"Проект {project.NameProject} Запущен!")
             
     def NginxConf(self,findstr : str, correctstr: str)->bool:
         """Коректировать Раскоментить\n
@@ -503,4 +596,27 @@ class Web_Nginx_Core(object):
                     linesset.append(li)
             res2, contents2, err2=self.__App.WriteFile(pathfile, linesset)
             Flag=res2
+        return Flag
+    def Ngnix_BackRestore(self, pathfile: str, pathfilenew: str)->bool:
+        """Резервирование Файлов"""
+        Flag=False
+        dir_reserv="/etc/nginx/backfiles"
+        # Создать если нету папки резерва
+        if os.path.exists(dir_reserv)==False:
+            os.system(f"mkdir {dir_reserv}")
+        if os.path.exists(dir_reserv)==True:
+            if os.path.exists(pathfilenew)==False:
+                os.system(f'cp -f "{pathfile}" "{pathfilenew}"')
+                Flag=True
+        return Flag
+    def Ngnix_Restore(self, pathfile: str, pathfilenew: str)->bool:
+        """Возврат Резервирование Файлов"""
+        Flag=False
+        dir_reserv="/etc/nginx/backfiles"
+        # Создать если нету папки резерва
+        if os.path.exists(dir_reserv)==False:
+            os.system(f"mkdir {dir_reserv}")
+        if os.path.exists(dir_reserv)==True:
+            os.system(f'cp -f "{pathfile}" "{pathfilenew}"')
+            Flag=True
         return Flag
