@@ -269,7 +269,7 @@ def Main():
                             hostrun=project["HostRun"],
                             ports=project["Ports"]
                         )
-                        proj_nginx.CreateSettingProject(project_nginx)
+                        proj_nginx.CreateSettingProjectOne(project_nginx)
                     else:
                         print(f"Или Ошыбка Проекта {nameproject}, или он уже есть!")
                         print(f"Ошыбка Проекта: {err}")
