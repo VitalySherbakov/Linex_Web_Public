@@ -9,6 +9,22 @@ class Web_Core(object):
     """Публикация Сайта"""
     def __init__(self):
         pass
+    def GetSplit(self, text: str, simvol=',')->list:
+        """Получить Массив из Строки"""
+        listing=[]
+        mass = text.split(simvol)
+        for li in mass:
+            li = li.strip()
+            if li:
+                listing.append(li)
+        return listing
+    def SetSplitText(self, listing: list, simvol=" ")->str:
+        """Собрать Список"""
+        text=""
+        for li in listing:
+            text+=f"{li}{simvol}"
+        text=text[:-len(simvol)]
+        return text
     def InputWhile(self, text: str)->str:
         """Ввод Данных Цыкловый"""
         Flag,Res=True,""
@@ -295,13 +311,13 @@ class Project_Nginx(object):
     """Файл Сервиса"""
     IP: str = "127.0.0.1"
     """IP Машыны для Хоста"""
-    Host: str=""
-    """Хост Проекта"""
+    Hosts: list=[]
+    """Хосты Проекта"""
     HostRun: str=""
     """Хост Запущен Проект"""
-    Port: int=80
+    Ports: list=[80]
     """Порт"""
-    def __init__(self, nameproject: str, dir_path: str, dir_project: str, file_project: str, core: str, nginx_file: str, service_file: str, ip: str, host: str, hostrun: str, port: int):
+    def __init__(self, nameproject: str, dir_path: str, dir_project: str, file_project: str, core: str, nginx_file: str, service_file: str, ip: str, hosts: list, hostrun: str, ports: list):
         self.NameProject=nameproject
         self.Dir_Path=dir_path
         self.Dir_Project=dir_project
@@ -310,9 +326,9 @@ class Project_Nginx(object):
         self.Nginx_File=nginx_file
         self.Service_File=service_file
         self.IP=ip
-        self.Host=host
+        self.Hosts=hosts
         self.HostRun=hostrun
-        self.Port=port
+        self.Ports=ports
 
 class Web_Nginx_Core(object):
     """Веб Настройка Использование Ядра Запуска Nginx"""
@@ -350,8 +366,8 @@ class Web_Nginx_Core(object):
             # Создать Файл Nginx
             content_nginx=[
                 "server {\n",
-                f"   listen {project.Port};\n",
-                f"   server_name {project.Host};\n",
+                f'   listen {self.__App.SetSplitText(project.Ports," ")};\n',
+                f'   server_name {self.__App.SetSplitText(project.Hosts," ")};\n',
                 "\n",
                 "   location / {\n",
                 f"      proxy_pass {project.HostRun};\n",
@@ -400,11 +416,12 @@ class Web_Nginx_Core(object):
             print("Nginx: /etc/nginx/nginx.conf")
             print("Nginx Раскоментен-> server_names_hash_bucket_size 64")
             # self.LinexHost_Del(project.IP, project.Host) #Удаление для перезаписи
-            self.LinexHost_Add(project.IP, project.Host)
+            for hos in project.Hosts:
+                self.LinexHost_Add(project.IP, hos)
             # Перезагружаем Nginx принял все настройки
             os.system("sudo systemctl restart nginx")
             print("Хост: /etc/hosts")
-            print(f"Добавлен: {project.IP}|{project.Host}")
+            print(f"Добавлен: {project.IP}|{project.Hosts}")
             print(f"Проект {project.NameProject} Запущен!")
             
     def NginxConf(self,findstr : str, correctstr: str)->bool:

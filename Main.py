@@ -88,5 +88,8 @@ proj_nginx = Web_Nginx_Core()
 # #res=proj_nginx.LinexHost_Add(ip,host)
 # res=proj_nginx.LinexHost_Del(ip,host)
 
-res = proj_nginx.LinexTor_Conf("HiddenServiceDir /var/lib/tor/hidden_service/","HiddenServiceDir /var/lib/tor/hidden_service/\n")
-res = proj_nginx.LinexTor_Conf("HiddenServicePort 80 127.0.0.1:80","HiddenServicePort 80 127.0.0.1:80\n")
+# res = proj_nginx.LinexTor_Conf("HiddenServiceDir /var/lib/tor/hidden_service/","HiddenServiceDir /var/lib/tor/hidden_service/\n")
+# res = proj_nginx.LinexTor_Conf("HiddenServicePort 80 127.0.0.1:80","HiddenServicePort 80 127.0.0.1:80\n")
+s=["localhost:5000","videoconferencial.hopto.org","127.0.0.1:80"]
+res=app.SetSplitText(s," ")
+print(f"|{res}|")

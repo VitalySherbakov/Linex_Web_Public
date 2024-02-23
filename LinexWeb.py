@@ -149,8 +149,10 @@ def Main():
             arhiveproject = app.InputWhile("Имя Файл Архива: ")
             filerunproject = app.InputWhile("Запускаймый Файл: ")
             ipproject = app.InputWhile("IP Машины: ")
-            hostproject = app.InputWhile("Хост Сайта: ")
-            portproject = app.InputWhile("Порт Трансляции: ")
+            print("Хосты Сайта через кому localhost,exaple.com")
+            hostsproject = app.InputWhile("Хосты Сайта: ")
+            print("Порта должны через кому 80,443,[::]:80,5000")
+            portsproject = app.InputWhile("Порта Трансляции: ")
             hostrunproject = app.InputWhile("Хост или IP Проекта: ")
             urlproject = app.InputWhile("Ccылка На Проект: ")
             # Путь куда Загружать Проект и куда распаковывать
@@ -175,10 +177,10 @@ def Main():
                     "NginxFile": f"{nameproject}", 
                     "Dir_Project": path_project,
                     "File_Project": filerunproject,
-                    "HostWeb": hostproject,
+                    "HostWebs": app.GetSplit(hostsproject,","),
                     "HostRun": hostrunproject,
                     "IP" : ipproject,
-                    "Port": portproject,
+                    "Ports": app.GetSplit(portsproject,","),
                     "Core": "core6", 
                     "ServiceFile": f"{nameproject}.service"
                 }
@@ -194,9 +196,9 @@ def Main():
                         nginx_file=project["NginxFile"],
                         service_file=project["ServiceFile"],
                         ip=project["IP"],
-                        host=project["HostWeb"],
+                        host=project["HostWebs"],
                         hostrun=project["HostRun"],
-                        port=project["Port"]
+                        ports=project["Ports"]
                     )
                     proj_nginx.CreateSettingProject(project_nginx)
                 else:
