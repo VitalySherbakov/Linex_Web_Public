@@ -473,7 +473,10 @@ class Web_Nginx_Core(object):
                 "       proxy_set_header X-Forwarded-Proto $scheme;\n",
                 "   }\n",
                 "}\n"
-                ]                 
+                ]
+            # Очистка sites-available и sites-enabled
+            self.Nginx_DelFilesFolder("/etc/nginx/sites-available",["default"])
+            self.Nginx_DelFilesFolder("/etc/nginx/sites-enabled",["default"])
             res2,content2, err2=self.__App.WriteFile(f"/etc/nginx/sites-available/default",content_nginx)
             if res2==True:
                 os.system(f'sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/')
@@ -620,3 +623,9 @@ class Web_Nginx_Core(object):
             os.system(f'cp -f "{pathfile}" "{pathfilenew}"')
             Flag=True
         return Flag
+    def Nginx_DelFilesFolder(self,dirpath: str, filesignore: list):
+        """Удаление Файлов в папке - с игнорирванием файлов"""
+        files = os.listdir(dirpath)
+        for fi in files:
+            if fi in filesignore:
+                os.system(f'rm -r {dirpath}/{fi}')

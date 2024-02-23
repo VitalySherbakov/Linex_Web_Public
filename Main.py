@@ -90,6 +90,12 @@ proj_nginx = Web_Nginx_Core()
 
 # res = proj_nginx.LinexTor_Conf("HiddenServiceDir /var/lib/tor/hidden_service/","HiddenServiceDir /var/lib/tor/hidden_service/\n")
 # res = proj_nginx.LinexTor_Conf("HiddenServicePort 80 127.0.0.1:80","HiddenServicePort 80 127.0.0.1:80\n")
-s=["localhost:5000","videoconferencial.hopto.org","127.0.0.1:80"]
-res=app.SetSplitText(s," ")
-print(f"|{res}|")
+# s=["localhost:5000","videoconferencial.hopto.org","127.0.0.1:80"]
+# res=app.SetSplitText(s," ")
+# print(f"|{res}|")
+
+s=["1","2","3","4","5"]
+d=["2","4", "6"]
+for li in s:
+    if li in d:
+        print(li)
