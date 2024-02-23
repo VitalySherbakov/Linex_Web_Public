@@ -196,7 +196,7 @@ def Main():
                         nginx_file=project["NginxFile"],
                         service_file=project["ServiceFile"],
                         ip=project["IP"],
-                        host=project["HostWebs"],
+                        hosts=project["HostWebs"],
                         hostrun=project["HostRun"],
                         ports=project["Ports"]
                     )
