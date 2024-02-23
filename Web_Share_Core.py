@@ -401,6 +401,8 @@ class Web_Nginx_Core(object):
             print("Nginx Раскоментен-> server_names_hash_bucket_size 64")
             # self.LinexHost_Del(project.IP, project.Host) #Удаление для перезаписи
             self.LinexHost_Add(project.IP, project.Host)
+            # Перезагружаем Nginx принял все настройки
+            os.system("sudo systemctl restart nginx")
             print("Хост: /etc/hosts")
             print(f"Добавлен: {project.IP}|{project.Host}")
             print(f"Проект {project.NameProject} Запущен!")
