@@ -340,7 +340,7 @@ def Main():
             os.system("chmod -R 777 /var/lib/tor/hidden_service/")
             res ,urltor, error = app.ReadFile("/var/lib/tor/hidden_service/hostname",1)
             if res==True:
-                print(f"URL TOR: {urltor}")
+                print(f"TOR Ссылка: {urltor}")
             else:
                 print(error)
         if result=="8":
