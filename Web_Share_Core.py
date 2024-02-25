@@ -417,7 +417,10 @@ class Web_Nginx_Core(object):
             print("Nginx Раскоментен-> server_names_hash_bucket_size 64")
             # self.LinexHost_Del(project.IP, project.Host) #Удаление для перезаписи
             for hos in project.Hosts:
-                self.LinexHost_Add(project.IP, hos)
+                project_ip=str(project.IP).lower()
+                hosnew=str(hos).lower()
+                if project_ip!=hosnew:
+                    self.LinexHost_Add(project_ip, hosnew)
             # Перезагружаем Nginx принял все настройки
             os.system("sudo systemctl restart nginx")
             print("Хост: /etc/hosts")
@@ -513,7 +516,10 @@ class Web_Nginx_Core(object):
             print("Nginx Раскоментен-> server_names_hash_bucket_size 64")
             # self.LinexHost_Del(project.IP, project.Host) #Удаление для перезаписи
             for hos in project.Hosts:
-                self.LinexHost_Add(project.IP, hos)
+                project_ip=str(project.IP).lower()
+                hosnew=str(hos).lower()
+                if project_ip!=hosnew:
+                    self.LinexHost_Add(project_ip, hosnew)
             # Перезагружаем Nginx принял все настройки
             os.system("sudo systemctl restart nginx")
             print("Хост: /etc/hosts")
