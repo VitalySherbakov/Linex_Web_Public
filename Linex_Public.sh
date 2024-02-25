@@ -61,7 +61,7 @@ function function_nginx(){
     sudo ufw allow 22
     sudo ufw allow 80
     sudo ufw allow 443
-    sudo ufw enable
+    echo "y" | sudo ufw enable
     sudo ufw status
     chmod -R 777 /var/www/html
 }
